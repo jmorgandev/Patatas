@@ -7,6 +7,7 @@ BOOL CALLBACK DialogProc_About(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 	LPNMHDR pnmh = (LPNMHDR)lParam;
 	switch (msg) {
 	case WM_INITDIALOG:
+		SetDlgItemText(hwnd, IDC_VERSION, "Version " PTS_VERSION);
 		return TRUE;
 	case WM_COMMAND:
 		if (LOWORD(wParam) == IDOK) {

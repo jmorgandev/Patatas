@@ -3,6 +3,15 @@
 #pragma once
 #include <stdint.h>
 
+#define AS_STRING(a) #a
+#define TO_STR(a) AS_STRING(a)
+
+#define PTS_VERSION_MAJOR    0
+#define PTS_VERSION_MINOR    1
+#define PTS_VERSION_REVISION 0
+
+#define PTS_VERSION TO_STR(PTS_VERSION_MAJOR)"."TO_STR(PTS_VERSION_MINOR)"."TO_STR(PTS_VERSION_REVISION)
+
 typedef uint8_t byte, uint8, u8;
 typedef uint16_t uint16, word, u16;
 typedef uint32_t uint32, u32;
@@ -53,8 +62,6 @@ void NotifyError();
 
 #define HREF_GITHUB "https://github.com/jmorgandev/Patatas"
 #define HREF_WIKI "https://en.wikipedia.org/wiki/CHIP-8"
-
-#define PTS_VERSION "1.0.0"
 
 #endif
 

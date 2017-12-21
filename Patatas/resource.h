@@ -6,6 +6,7 @@
 #define IDD_ABOUT                       102
 #define IDC_GITHUB                      1001
 #define IDC_WIKI                        1002
+#define IDC_VERSION                     1011
 #define ID_FILE_OPENROM                 40001
 #define ID_FILE_RESET                   40002
 #define ID_FILE_RECENT                  40003
@@ -45,7 +46,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        108
 #define _APS_NEXT_COMMAND_VALUE         40058
-#define _APS_NEXT_CONTROL_VALUE         1011
+#define _APS_NEXT_CONTROL_VALUE         1012
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
