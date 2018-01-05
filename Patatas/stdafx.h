@@ -63,5 +63,16 @@ void NotifyError();
 #define HREF_GITHUB "https://github.com/jmorgandev/Patatas"
 #define HREF_WIKI "https://en.wikipedia.org/wiki/CHIP-8"
 
+enum ModelessDialogs {
+	PTS_DLG_MEMORY,
+	PTS_DLG_REG,
+	PTS_DLG_COUNT
+};
+
+bool ValidHexChar(const char c);
+bool ValidHexInput(const char* str);
+
+uint StrToHex(const char* str);
+
 #endif
 

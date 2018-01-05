@@ -8,7 +8,10 @@
 #define VID_SIZE (VID_WIDTH * VID_HEIGHT) / 8
 #define VID_BYTES_PER_ROW VID_WIDTH / 8
 
-extern byte display[VID_SIZE];
+#define MEMORY_SIZE 0xFFF
+
+extern byte c8_Display[VID_SIZE];
+extern byte c8_Memory[MEMORY_SIZE];
 
 enum CHIP8_KEY {
 	CK_0, CK_1, CK_2, CK_3,
@@ -32,5 +35,4 @@ void Chip8_Reset();
 void Chip8_Cycle();
 
 void Chip8_TestProgram();
-
 #endif

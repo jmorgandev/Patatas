@@ -3,7 +3,7 @@
 #include <CommCtrl.h>
 #include "resource.h"
 
-BOOL CALLBACK DialogProc_About(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+INT_PTR CALLBACK DialogProc_About(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	LPNMHDR pnmh = (LPNMHDR)lParam;
 	switch (msg) {
 	case WM_INITDIALOG:

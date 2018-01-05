@@ -113,6 +113,8 @@
   <ItemGroup>
     <ClCompile Include="chip8.cpp" />
     <ClCompile Include="dialog_about.cpp" />
+    <ClCompile Include="dialog_file.cpp" />
+    <ClCompile Include="dialog_memory.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="windraw.cpp" />
     <ClCompile Include="winmain.cpp" />
@@ -122,6 +124,8 @@
     <ClInclude Include="c8font.h" />
     <ClInclude Include="chip8.h" />
     <ClInclude Include="dialog_about.h" />
+    <ClInclude Include="dialog_file.h" />
+    <ClInclude Include="dialog_memory.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />

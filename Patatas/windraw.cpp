@@ -57,8 +57,7 @@ void Draw_PaintFrame(HDC deviceContext) {
 			rect.right = rect.left + drawScale;
 			rect.bottom = rect.top + drawScale;
 
-
-			if ((display[byt] >> (7 - bit)) & 0x01) {
+			if ((c8_Display[byt] >> (7 - bit)) & 0x01) {
 				FillRect(deviceContext, &rect, fgBrush);
 			}
 		}

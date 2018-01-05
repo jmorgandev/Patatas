@@ -39,6 +39,12 @@
     <ClCompile Include="windraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dialog_file.cpp">
+      <Filter>Source Files\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="dialog_memory.cpp">
+      <Filter>Source Files\dialog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -53,13 +59,19 @@
     <ClInclude Include="c8font.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="dialog_about.h">
       <Filter>Header Files\dialog</Filter>
     </ClInclude>
     <ClInclude Include="windraw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dialog_file.h">
+      <Filter>Header Files\dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="dialog_memory.h">
+      <Filter>Header Files\dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

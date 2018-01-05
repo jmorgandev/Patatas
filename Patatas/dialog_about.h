@@ -3,6 +3,6 @@
 #pragma once
 #include <Windows.h>
 
-BOOL CALLBACK DialogProc_About(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+INT_PTR CALLBACK DialogProc_About(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 #endif

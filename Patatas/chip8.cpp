@@ -4,14 +4,13 @@
 #include <fstream>
 #include <ctime>
 
-#define MEMORY_SIZE 0xFFF
 #define PROGRAM_START 0x200
 #define PROGRAM_SIZE (MEMORY_SIZE - PROGRAM_START)
 
 #define STACK_SIZE 16
 
-byte systemMemory[MEMORY_SIZE];
-byte display[VID_SIZE];
+byte c8_Memory[MEMORY_SIZE];
+byte c8_Display[VID_SIZE];
 word stack[STACK_SIZE];
 bool keys[CHIP8_KEY_COUNT];
 
@@ -30,7 +29,7 @@ bool keyBlock = false;
 bool Chip8_Init() {
 	Chip8_Reset();
 
-	memcpy(systemMemory, CHIP8_FONT, CHIP8_FONT_SIZE);
+	memcpy(c8_Memory, CHIP8_FONT, CHIP8_FONT_SIZE);
 
 	srand(time(NULL));
 
@@ -38,8 +37,8 @@ bool Chip8_Init() {
 }
 
 void Chip8_Reset() {
-	memset(systemMemory, NULL, MEMORY_SIZE);
-	memset(display, NULL, VID_SIZE);
+	memset(c8_Memory, NULL, MEMORY_SIZE);
+	memset(c8_Display, NULL, VID_SIZE);
 	memset(stack, NULL, STACK_SIZE);
 	memset(V, NULL, 16);
 
@@ -53,6 +52,8 @@ void Chip8_Reset() {
 }
 
 bool Chip8_LoadProgram(const char* path) {
+	Chip8_Reset();
+
 	std::ifstream file(path, std::ios::binary);
 	if (!file.is_open()) return false;
 
@@ -61,19 +62,19 @@ bool Chip8_LoadProgram(const char* path) {
 	if (length > PROGRAM_SIZE) return false;
 
 	file.seekg(std::ios::beg);
-	file.read((char*)systemMemory + PROGRAM_START, length);
+	file.read((char*)c8_Memory + PROGRAM_START, length);
 	file.close();
 }
 
 void Chip8_Cycle() {
 	if (keyBlock) return;
-	word opcode = (systemMemory[PC] << 8) | (systemMemory[PC + 1]);
+	word opcode = (c8_Memory[PC] << 8) | (c8_Memory[PC + 1]);
 	
 	switch (opcode >> 12) {
 	case 0x0:
 		if (opcode == 0x00E0) {
 			//Clear the screen
-			memset(display, NULL, VID_SIZE);
+			memset(c8_Display, NULL, VID_SIZE);
 		}
 		else if(opcode == 0x00EE) {
 			//Return from a subroutine
@@ -207,15 +208,15 @@ void Chip8_Cycle() {
 		if (bytes == 0) break; //Or throw exception...
 
 		for (uint row = 0; row < bytes; row++) {
-			uint pixelStrip = systemMemory[I + row];
+			uint pixelStrip = c8_Memory[I + row];
 			for (uint bit = 0; bit < 8; bit++) {
 				if((pixelStrip & (0x80 >> bit))) {
 					uint x = xPos + bit;
 					uint y = yPos + row;
 					uint index = (y * VID_BYTES_PER_ROW) + (x / 8);
 					
-					if ((display[index] >> (x % 8)) & 0x1) V[0xF] = 1;
-					display[index] ^= (0x80 >> (x % 8));
+					if ((c8_Display[index] >> (x % 8)) & 0x1) V[0xF] = 1;
+					c8_Display[index] ^= (0x80 >> (x % 8));
 				}
 			}
 		}
@@ -268,22 +269,22 @@ void Chip8_Cycle() {
 			//Store the binary-coded decimal equivalent of the value stored
 			//in register VX at addresses I, I+1, and I+2
 			uint reg = (opcode & 0xF00) >> 8;
-			systemMemory[I] = (V[reg] / 100);
-			systemMemory[I + 1] = (V[reg] / 10) % 10;
-			systemMemory[I + 2] = (V[reg] % 10);
+			c8_Memory[I] = (V[reg] / 100);
+			c8_Memory[I + 1] = (V[reg] / 10) % 10;
+			c8_Memory[I + 2] = (V[reg] % 10);
 		}   break;
 		case 0x55:
 			//Store the values of registers V0 to VX inclusive in memory starting
 			//at address I. I is set to I + X + 1 after operation.
 			for (uint i = 0; i <= (opcode & 0xF00) >> 8; ++i) {
-				systemMemory[I + i] = V[i];
+				c8_Memory[I + i] = V[i];
 			}
 			break;
 		case 0x65:
 			//Fill registers V0 to VX inclusive with the values stored in memory
 			//starting at address I. I is set to I + X + 1 after operation.
 			for (uint i = 0; i <= (opcode & 0xF00) >> 8; ++i) {
-				V[i] = systemMemory[I + i];
+				V[i] = c8_Memory[I + i];
 			}
 			break;
 		default:
@@ -308,6 +309,6 @@ void Chip8_TestProgram() {
 		0xFF, 0x0A
 	};
 
-	memcpy(systemMemory + PROGRAM_START, prog, sizeof(prog));
+	memcpy(c8_Memory + PROGRAM_START, prog, sizeof(prog));
 }
 
