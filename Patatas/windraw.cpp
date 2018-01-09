@@ -57,12 +57,12 @@ void Draw_PaintFrame(HDC deviceContext) {
 			rect.right = rect.left + drawScale;
 			rect.bottom = rect.top + drawScale;
 
-			if ((c8_Display[byt] >> (7 - bit)) & 0x01) {
+			if ((c8.display[byt] >> (7 - bit)) & 0x01) {
 				FillRect(deviceContext, &rect, fgBrush);
 			}
 		}
 	}
-	displayUpdate = false;
+	c8.displayUpdate = false;
 }
 
 void Draw_Exit() {

@@ -18,6 +18,9 @@ static void HandleCommand(HWND hwnd, word cmd) {
 			uint target = StrToHex(buffer) / 0x10;
 			PostMessage(GetDlgItem(hwnd, IDC_MEMORY_LIST), WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, target), 0);
 		} break;
+	case IDC_MEMSEEK_PC: {
+			
+		} break;
 	}
 }
 
@@ -38,7 +41,7 @@ INT_PTR CALLBACK DialogProc_Memory(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 				sprintf_s(buffer, 70, "%03X:", row * 0x10);
 				for (uint column = 0; column < 0x10; ++column) {
 					uint len = strlen(buffer);
-					uint data = c8_Memory[(row * 0x10) + column];
+					uint data = c8.memory[(row * 0x10) + column];
 					uint spaces = (column != 0);
 					sprintf_s(buffer + len, 70 - len, " %02X", data);
 				}

@@ -32,7 +32,7 @@ bool Input_Init() {
 	keyBinds[CK_B] = VK_C;
 	keyBinds[CK_F] = VK_V;
 
-	std::memset(keys, 0, CHIP8_KEY_COUNT);
+	std::memset(c8.keys, 0, CHIP8_KEY_COUNT);
 
 	return true;
 }
@@ -40,5 +40,5 @@ bool Input_Init() {
 void Input_KeyEvent(uint type, uint key) {
 	uint chip8Key = GetChip8Key(key);
 	if (chip8Key != NULL)
-		keys[chip8Key] = (type == WM_KEYDOWN) ? true : false;
+		c8.keys[chip8Key] = (type == WM_KEYDOWN) ? true : false;
 }

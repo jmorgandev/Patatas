@@ -144,7 +144,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		while (accumulator >= cycleFreq) {
 			Chip8_Cycle();
-			if (displayUpdate) Draw_PaintFrame(deviceContext);
+			if (c8.displayUpdate) Draw_PaintFrame(deviceContext);
 			accumulator -= cycleFreq;
 		}
 	}
