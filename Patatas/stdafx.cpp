@@ -33,3 +33,7 @@ uint StrToHex(const char* str) {
 	}
 	return result;
 }
+
+void PostCommand(HWND hwnd, word cmd, LPARAM lParam) {
+	PostMessage(hwnd, WM_COMMAND, cmd, lParam);
+}

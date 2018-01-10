@@ -123,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="c8font.h" />
     <ClInclude Include="chip8.h" />
+    <ClInclude Include="dialog.h" />
     <ClInclude Include="dialog_about.h" />
     <ClInclude Include="dialog_file.h" />
     <ClInclude Include="dialog_memory.h" />

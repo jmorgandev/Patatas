@@ -1,10 +1,41 @@
 #include "dialog_memory.h"
 #include "stdafx.h"
 #include <stdio.h>
+#include <memory>
 #include "chip8.h"
 #include "resource.h"
 
 HFONT fnt = NULL;
+HWND list = NULL;
+
+static void PopulateList() {
+	char buffer[70];
+	for (uint row = 0; row < (MEMORY_SIZE / 0x10); ++row) {
+		sprintf_s(buffer, 70, "%03X:", row * 0x10);
+		for (uint column = 0; column < 0x10; ++column) {
+			uint len = strlen(buffer);
+			uint data = c8.memory[(row * 0x10) + column];
+			uint spaces = (column != 0);
+			sprintf_s(buffer + len, 70 - len, " %02X", data);
+		}
+		SendMessage(list, LB_ADDSTRING, 0, (LPARAM)buffer);
+	}
+}
+
+static void RedrawList() {
+	SendMessage(list, WM_SETREDRAW, false, 0);
+	uint pos = GetScrollPos(list, SB_VERT);
+	
+	SendMessage(list, LB_RESETCONTENT, NULL, NULL);
+	SendMessage(list, LB_INITSTORAGE, MEMORY_SIZE / 0x10, 70);
+	PopulateList();
+	PostMessage(list, WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, pos), 0);
+	SendMessage(list, WM_SETREDRAW, true, 0);
+	PostMessage(list, WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, pos), 0);
+	UpdateWindow(list);
+	PostMessage(list, WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, pos), 0);
+}
+void TEST_DRAW() { RedrawList(); }
 
 static void HandleCommand(HWND hwnd, word cmd) {
 	switch (cmd) {
@@ -16,11 +47,15 @@ static void HandleCommand(HWND hwnd, word cmd) {
 				return;
 			}
 			uint target = StrToHex(buffer) / 0x10;
-			PostMessage(GetDlgItem(hwnd, IDC_MEMORY_LIST), WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, target), 0);
+			PostMessage(list, WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, target), 0);
 		} break;
 	case IDC_MEMSEEK_PC: {
-			
+			uint target = c8.PC / 0x10;
+			PostMessage(list, WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, target), 0);
 		} break;
+	case IDC_REDRAW:
+		RedrawList();
+		break;
 	}
 }
 
@@ -36,17 +71,9 @@ INT_PTR CALLBACK DialogProc_Memory(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
 			SendDlgItemMessage(hwnd, IDC_MEM_ADDR, EM_LIMITTEXT, 3, NULL);
 
-			char buffer[70];
-			for (uint row = 0; row < (MEMORY_SIZE / 0x10); ++row) {
-				sprintf_s(buffer, 70, "%03X:", row * 0x10);
-				for (uint column = 0; column < 0x10; ++column) {
-					uint len = strlen(buffer);
-					uint data = c8.memory[(row * 0x10) + column];
-					uint spaces = (column != 0);
-					sprintf_s(buffer + len, 70 - len, " %02X", data);
-				}
-				SendDlgItemMessage(hwnd, IDC_MEMORY_LIST, LB_ADDSTRING, 0, (LPARAM)buffer);
-			}
+			list = GetDlgItem(hwnd, IDC_MEMORY_LIST);
+			PopulateList();
+			std::memset(c8.memory, NULL, 512);
 		} break;
 	case WM_CLOSE:
 		DestroyWindow(hwnd);

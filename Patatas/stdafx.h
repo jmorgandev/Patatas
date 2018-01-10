@@ -1,6 +1,7 @@
 #ifndef PTS_STDAFX
 #define PTS_STDAFX
 #pragma once
+#include <Windows.h>
 #include <stdint.h>
 
 #define AS_STRING(a) #a
@@ -27,7 +28,6 @@ typedef unsigned int uint;
 #define VK_7 0x37
 #define VK_8 0x38
 #define VK_9 0x39
-
 #define VK_A 0x41
 #define VK_B 0x42
 #define VK_C 0x43
@@ -55,24 +55,21 @@ typedef unsigned int uint;
 #define VK_Y 0x59
 #define VK_Z 0x5A
 
-#define NULL 0
-
 void OpenURL(const char* url);
 void NotifyError();
 
 #define HREF_GITHUB "https://github.com/jmorgandev/Patatas"
-#define HREF_WIKI "https://en.wikipedia.org/wiki/CHIP-8"
-
-enum ModelessDialogs {
-	PTS_DLG_MEMORY,
-	PTS_DLG_REG,
-	PTS_DLG_COUNT
-};
+#define HREF_WIKI   "https://en.wikipedia.org/wiki/CHIP-8"
 
 bool ValidHexChar(const char c);
 bool ValidHexInput(const char* str);
 
 uint StrToHex(const char* str);
 
+void PostCommand(HWND hwnd, word cmd, LPARAM lParam);
+
+const double DEBUG_FREQ = 1000.0 / 30.0;
+
+#define IDC_REDRAW (WM_USER + 1)
 #endif
 

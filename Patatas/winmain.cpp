@@ -9,6 +9,7 @@
 #include "windraw.h"
 #include <CommCtrl.h>
 
+#include "dialog.h"
 #include "dialog_about.h"
 #include "dialog_file.h"
 #include "dialog_memory.h"
@@ -25,7 +26,7 @@ HDC deviceContext = NULL;
 
 uint winStyle = WS_OVERLAPPEDWINDOW ^ (WS_THICKFRAME | WS_MAXIMIZEBOX);
 
-HWND dialogs[PTS_DLG_COUNT];
+HWND dialogs[DLG_COUNT];
 
 bool running = true;
 
@@ -126,6 +127,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	double lastTime = (double)GetTickCount();
 	double accumulator = 0;
+	double debug_acc = 0;
 
 	Chip8_TestProgram();
 	
@@ -140,12 +142,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		double currentTime = (double)GetTickCount();
 		accumulator += (currentTime - lastTime);
+		debug_acc += (currentTime - lastTime);
 		lastTime = currentTime;
 
 		while (accumulator >= cycleFreq) {
 			Chip8_Cycle();
 			if (c8.displayUpdate) Draw_PaintFrame(deviceContext);
 			accumulator -= cycleFreq;
+		}
+		
+		while (debug_acc >= DEBUG_FREQ) {
+			if (dialogs[DLG_MEMORY] != NULL) TEST_DRAW();
+			debug_acc -= DEBUG_FREQ;
 		}
 	}
 
@@ -171,7 +179,7 @@ void HandleCommand(HWND hwnd, word cmd) {
 			HWND dlg = CreateDialog(GetModuleHandle(0), MAKEINTRESOURCE(IDD_MEMORY), hwnd, DialogProc_Memory);
 			if (dlg) {
 				ShowWindow(dlg, SW_SHOW);
-				dialogs[PTS_DLG_MEMORY] = dlg;
+				dialogs[DLG_MEMORY] = dlg;
 			}
 			else NotifyError();
 		} break;

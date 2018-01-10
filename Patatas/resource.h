@@ -13,7 +13,6 @@
 #define IDC_MEM_ADDR                    1033
 #define IDC_MEMSEEK_ADDR                1034
 #define IDC_MEMSEEK_PC                  1035
-#define IDC_BUTTON5                     1038
 #define ID_FILE_OPENROM                 40001
 #define ID_FILE_CLOSE                   40002
 #define ID_FILE_RECENT                  40003

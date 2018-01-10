@@ -5,4 +5,6 @@
 
 INT_PTR CALLBACK DialogProc_Memory(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+void TEST_DRAW();
+
 #endif
