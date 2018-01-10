@@ -13,6 +13,7 @@
 #define IDC_MEM_ADDR                    1033
 #define IDC_MEMSEEK_ADDR                1034
 #define IDC_MEMSEEK_PC                  1035
+#define IDC_REFRESH                     1039
 #define ID_FILE_OPENROM                 40001
 #define ID_FILE_CLOSE                   40002
 #define ID_FILE_RECENT                  40003
@@ -58,7 +59,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        110
 #define _APS_NEXT_COMMAND_VALUE         40074
-#define _APS_NEXT_CONTROL_VALUE         1039
+#define _APS_NEXT_CONTROL_VALUE         1040
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

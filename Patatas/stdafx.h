@@ -68,8 +68,6 @@ uint StrToHex(const char* str);
 
 void PostCommand(HWND hwnd, word cmd, LPARAM lParam);
 
-const double DEBUG_FREQ = 1000.0 / 30.0;
-
 #define IDC_REDRAW (WM_USER + 1)
 #endif
 

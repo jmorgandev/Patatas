@@ -18,30 +18,29 @@ static void PopulateList() {
 			uint spaces = (column != 0);
 			sprintf_s(buffer + len, 70 - len, " %02X", data);
 		}
-		SendMessage(list, LB_ADDSTRING, 0, (LPARAM)buffer);
+		SendMessage(list, LB_ADDSTRING, -1, (LPARAM)buffer);
 	}
 }
 
 static void RedrawList() {
 	SendMessage(list, WM_SETREDRAW, false, 0);
 	uint pos = GetScrollPos(list, SB_VERT);
-	
 	SendMessage(list, LB_RESETCONTENT, NULL, NULL);
 	SendMessage(list, LB_INITSTORAGE, MEMORY_SIZE / 0x10, 70);
 	PopulateList();
-	PostMessage(list, WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, pos), 0);
 	SendMessage(list, WM_SETREDRAW, true, 0);
 	PostMessage(list, WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, pos), 0);
-	UpdateWindow(list);
-	PostMessage(list, WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, pos), 0);
 }
-void TEST_DRAW() { RedrawList(); }
 
 static void HandleCommand(HWND hwnd, word cmd) {
 	switch (cmd) {
 	case IDC_MEMSEEK_ADDR: {
 			char buffer[4];
 			GetDlgItemText(hwnd, IDC_MEM_ADDR, buffer, 4);
+			if (strlen(buffer) == 0) {
+				MessageBox(hwnd, "Enter a valid hex address", "Warning", MB_OK);
+				return;
+			}
 			if (!ValidHexInput(buffer)) {
 				MessageBox(hwnd, "Invalid Hex Input", "Warning", MB_OK);
 				return;
@@ -53,7 +52,7 @@ static void HandleCommand(HWND hwnd, word cmd) {
 			uint target = c8.PC / 0x10;
 			PostMessage(list, WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, target), 0);
 		} break;
-	case IDC_REDRAW:
+	case IDC_REFRESH: 
 		RedrawList();
 		break;
 	}
