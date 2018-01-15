@@ -45,6 +45,9 @@
     <ClCompile Include="dialog_memory.cpp">
       <Filter>Source Files\dialog</Filter>
     </ClCompile>
+    <ClCompile Include="dialog_reg.cpp">
+      <Filter>Source Files\dialog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -76,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="dialog.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dialog_reg.h">
+      <Filter>Header Files\dialog</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

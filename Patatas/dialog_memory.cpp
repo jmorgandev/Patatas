@@ -42,7 +42,7 @@ static void HandleCommand(HWND hwnd, word cmd) {
 				return;
 			}
 			if (!ValidHexInput(buffer)) {
-				MessageBox(hwnd, "Invalid Hex Input", "Warning", MB_OK);
+				MessageBox(hwnd, "Invalid hex address", "Warning", MB_OK);
 				return;
 			}
 			uint target = StrToHex(buffer) / 0x10;
@@ -72,7 +72,6 @@ INT_PTR CALLBACK DialogProc_Memory(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
 			list = GetDlgItem(hwnd, IDC_MEMORY_LIST);
 			PopulateList();
-			std::memset(c8.memory, NULL, 512);
 		} break;
 	case WM_CLOSE:
 		DestroyWindow(hwnd);
