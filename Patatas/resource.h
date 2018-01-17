@@ -37,6 +37,8 @@
 #define IDC_REG_PC                      1059
 #define IDC_REG_PC2                     1060
 #define IDC_REG_SP                      1060
+#define IDC_LIST1                       1061
+#define IDC_STACK_LIST                  1062
 #define ID_FILE_OPENROM                 40001
 #define ID_FILE_CLOSE                   40002
 #define ID_FILE_RECENT                  40003
@@ -82,7 +84,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        112
 #define _APS_NEXT_COMMAND_VALUE         40074
-#define _APS_NEXT_CONTROL_VALUE         1041
+#define _APS_NEXT_CONTROL_VALUE         1063
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
