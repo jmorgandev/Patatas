@@ -9,10 +9,11 @@
 #include "windraw.h"
 #include <CommCtrl.h>
 
-#include "dialog.h"
+#include "modeless_dialog.h"
+HWND modeless_dialogs[DLG_COUNT];
+
 #include "dialog_about.h"
 #include "dialog_file.h"
-#include "dialog_memory.h"
 
 #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' "\
 		"version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -26,13 +27,11 @@ HDC deviceContext = NULL;
 
 uint winStyle = WS_OVERLAPPEDWINDOW ^ (WS_THICKFRAME | WS_MAXIMIZEBOX);
 
-HWND dialogs[DLG_COUNT];
-
 bool running = true;
 
 bool MessageForDialog(MSG* msg) {
 	bool handled = false;
-	for (HWND hwnd : dialogs) {
+	for (HWND hwnd : modeless_dialogs) {
 		if (IsWindow(hwnd) && IsDialogMessage(hwnd, msg)) handled = true;
 	}
 	return handled;
@@ -172,9 +171,16 @@ void HandleCommand(HWND hwnd, word cmd) {
 			HWND dlg = CreateDialog(GetModuleHandle(0), MAKEINTRESOURCE(IDD_MEMORY), hwnd, DialogProc_Memory);
 			if (dlg) {
 				ShowWindow(dlg, SW_SHOW);
-				dialogs[DLG_MEMORY] = dlg;
+				modeless_dialogs[DLG_MEMORY] = dlg;
 			}
 			else NotifyError();
+		} break;
+	case ID_VIEW_REGISTERS: {
+			HWND dlg = CreateDialog(GetModuleHandle(0), MAKEINTRESOURCE(IDD_REGISTER), hwnd, DialogProc_Register);
+			if (dlg) {
+				ShowWindow(dlg, SW_SHOW);
+				modeless_dialogs[DLG_REGISTER] = dlg;
+			}
 		} break;
 	case ID_HELP_ABOUT:
 		INT result = DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_ABOUT), hwnd, DialogProc_About);

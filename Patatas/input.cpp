@@ -1,7 +1,6 @@
 #include "input.h"
 #include "stdafx.h"
 #include "chip8.h"
-#include "dialog.h"
 #include <memory>
 
 #include <Windows.h>

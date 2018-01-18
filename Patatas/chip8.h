@@ -19,6 +19,12 @@ enum c8_Key {
 	CHIP8_KEY_COUNT,
 	NULL_KEY
 };
+enum c8_Reg {
+	V0, V1, V2, V3, V4, V5, V6,
+	V7, V8, V9, VA, VB, VC, VD,
+	VE, VF, DT, ST, I, PC, SP,
+	CHIP8_REG_COUNT
+};
 
 struct c8_State {
 	byte memory [MEMORY_SIZE];
@@ -27,8 +33,8 @@ struct c8_State {
 	bool keys   [CHIP8_KEY_COUNT];
 
 	byte V[0x10];
+	byte DT, ST;
 	word I, PC, SP;
-	byte ST, DT;
 
 	bool displayUpdate;
 	bool keyWait;

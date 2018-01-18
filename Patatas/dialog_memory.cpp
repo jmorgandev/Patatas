@@ -5,17 +5,17 @@
 #include "chip8.h"
 #include "resource.h"
 
-HFONT fnt = NULL;
-HWND list = NULL;
+static HFONT fnt = NULL;
+static HWND list = NULL;
 
 static void PopulateList() {
 	char buffer[70];
 	for (uint row = 0; row < (MEMORY_SIZE / 0x10); ++row) {
 		sprintf_s(buffer, 70, "%03X:", row * 0x10);
-		for (uint column = 0; column < 0x10; ++column) {
+		for (uint col = 0; col < 0x10; col++) {
 			uint len = strlen(buffer);
-			uint data = c8.memory[(row * 0x10) + column];
-			uint spaces = (column != 0);
+			uint data = c8.memory[(row * 0x10) + col];
+			uint spaces = (col != 0);
 			sprintf_s(buffer + len, 70 - len, " %02X", data);
 		}
 		SendMessage(list, LB_ADDSTRING, -1, (LPARAM)buffer);

@@ -115,7 +115,7 @@
     <ClCompile Include="dialog_about.cpp" />
     <ClCompile Include="dialog_file.cpp" />
     <ClCompile Include="dialog_memory.cpp" />
-    <ClCompile Include="dialog_reg.cpp" />
+    <ClCompile Include="dialog_register.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="windraw.cpp" />
     <ClCompile Include="winmain.cpp" />
@@ -124,11 +124,11 @@
   <ItemGroup>
     <ClInclude Include="c8font.h" />
     <ClInclude Include="chip8.h" />
-    <ClInclude Include="dialog.h" />
+    <ClInclude Include="modeless_dialog.h" />
     <ClInclude Include="dialog_about.h" />
     <ClInclude Include="dialog_file.h" />
     <ClInclude Include="dialog_memory.h" />
-    <ClInclude Include="dialog_reg.h" />
+    <ClInclude Include="dialog_register.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
