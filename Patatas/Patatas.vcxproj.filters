@@ -19,24 +19,24 @@
     <Filter Include="Source Files\dialog">
       <UniqueIdentifier>{fad4342b-a92d-4841-b8c6-6e78c393a7ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\main">
+      <UniqueIdentifier>{3242ef27-f08e-4136-a69f-a7fa8171906f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\chip8">
+      <UniqueIdentifier>{0af877b2-2618-48a4-8ceb-062b9078f70e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\main">
+      <UniqueIdentifier>{c5e40a97-1a05-46e1-8dd3-310a2951f793}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\chip8">
+      <UniqueIdentifier>{5fdbdaef-61a2-42fe-93bb-99a755ad639e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="chip8.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="dialog_about.cpp">
       <Filter>Source Files\dialog</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="winmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="windraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dialog_file.cpp">
@@ -48,25 +48,25 @@
     <ClCompile Include="dialog_register.cpp">
       <Filter>Source Files\dialog</Filter>
     </ClCompile>
+    <ClCompile Include="chip8.cpp">
+      <Filter>Source Files\chip8</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>Source Files\main</Filter>
+    </ClCompile>
+    <ClCompile Include="windraw.cpp">
+      <Filter>Source Files\main</Filter>
+    </ClCompile>
+    <ClCompile Include="winmain.cpp">
+      <Filter>Source Files\main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="chip8.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="c8font.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="dialog_about.h">
       <Filter>Header Files\dialog</Filter>
-    </ClInclude>
-    <ClInclude Include="windraw.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dialog_file.h">
       <Filter>Header Files\dialog</Filter>
@@ -80,8 +80,20 @@
     <ClInclude Include="dialog_register.h">
       <Filter>Header Files\dialog</Filter>
     </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>Header Files\main</Filter>
+    </ClInclude>
     <ClInclude Include="modeless_dialog.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\main</Filter>
+    </ClInclude>
+    <ClInclude Include="windraw.h">
+      <Filter>Header Files\main</Filter>
+    </ClInclude>
+    <ClInclude Include="chip8.h">
+      <Filter>Header Files\chip8</Filter>
+    </ClInclude>
+    <ClInclude Include="c8font.h">
+      <Filter>Header Files\chip8</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

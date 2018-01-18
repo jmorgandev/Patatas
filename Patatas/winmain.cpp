@@ -23,9 +23,10 @@ const char* winTitle = "Patatas";
 
 void HandleCommand(HWND, word);
 
-HDC deviceContext = NULL;
-
 uint winStyle = WS_OVERLAPPEDWINDOW ^ (WS_THICKFRAME | WS_MAXIMIZEBOX);
+HWND winHandle = NULL;
+HMENU winMenu = NULL;
+HDC deviceContext = NULL;
 
 bool running = true;
 
@@ -67,7 +68,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-	HWND hwnd;
 	MSG msg;
 
 	WNDCLASSEX wc = { 0 };
@@ -90,7 +90,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	RECT wr = { 0, 0, (VID_WIDTH * drawScale) + border, (VID_HEIGHT * drawScale) + border };
 	AdjustWindowRect(&wr, winStyle, TRUE);
 
-	hwnd = CreateWindowEx(
+	winHandle = CreateWindowEx(
 		WS_EX_CLIENTEDGE,
 		winClass,
 		winTitle,
@@ -100,25 +100,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		NULL, NULL, hInstance, NULL
 	);
 
-	if (hwnd == NULL) {
+	if (winHandle == NULL) {
 		MessageBox(NULL, "Window Creation Failed!", "Error",
 			MB_ICONEXCLAMATION | MB_OK);
 		return 0;
 	}
-	deviceContext = GetDC(hwnd);
+	deviceContext = GetDC(winHandle);
 	if (deviceContext == NULL) {
 		MessageBox(NULL, "Could not get device context!", "Error",
 			MB_ICONEXCLAMATION | MB_OK);
 		return 0;
 	}
 
-	RECT r;
-	GetClientRect(hwnd, &r);
-	uint w = r.right;
-	uint h = r.bottom;
+	winMenu = GetMenu(winHandle);
+	CheckMenuRadioItem(winMenu, ID_WINSIZE_X4, ID_WINSIZE_CUSTOM, ID_WINSIZE_X4 + scaleIndex, MF_BYCOMMAND);
 
-	ShowWindow(hwnd, nCmdShow);
-	UpdateWindow(hwnd);
+	ShowWindow(winHandle, nCmdShow);
+	UpdateWindow(winHandle);
 
 	Chip8_Init();
 	Draw_Init();
@@ -150,8 +148,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	Draw_Exit();
-	ReleaseDC(hwnd, deviceContext);
-	DestroyWindow(hwnd);
+	ReleaseDC(winHandle, deviceContext);
+	DestroyWindow(winHandle);
 	return 0;
 }
 
@@ -182,9 +180,27 @@ void HandleCommand(HWND hwnd, word cmd) {
 				modeless_dialogs[DLG_REGISTER] = dlg;
 			}
 		} break;
-	case ID_HELP_ABOUT:
-		INT result = DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_ABOUT), hwnd, DialogProc_About);
-		if (result == -1) NotifyError();
+	case ID_HELP_ABOUT: {
+			INT result = DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_ABOUT), hwnd, DialogProc_About);
+			if (result == -1) NotifyError();
+		} break;
+	case ID_WINSIZE_X4:
+		Draw_SetScale(0);
+		break;
+	case ID_WINSIZE_X8:
+		Draw_SetScale(1);
+		break;
+	case ID_WINSIZE_X12:
+		Draw_SetScale(2);
+		break;
+	case ID_WINSIZE_X16:
+		Draw_SetScale(3);
+		break;
+	case ID_WINSIZE_X20:
+		Draw_SetScale(4);
+		break;
+	case ID_WINSIZE_CUSTOM:
+		Draw_SetScale(CUSTOM_SCALE);
 		break;
 	}
 }

@@ -1,7 +1,9 @@
 #include "windraw.h"
 #include "chip8.h"
+#include "resource.h"
 
 uint drawScale = 12;
+uint scaleIndex = 2;
 
 uint bgColor = 0x362B00; //002B36
 uint fgColor = 0xE3F6FD; //FDF6E3
@@ -10,6 +12,10 @@ HBRUSH fgBrush = NULL;
 
 double framesPerSecond = 60;
 double renderFreq = 1000.0 / 60;
+
+static uint scaleArray[5] = {
+	4, 8, 12, 16, 20
+};
 
 bool Draw_Init() {
 
@@ -68,4 +74,22 @@ void Draw_PaintFrame(HDC deviceContext) {
 void Draw_Exit() {
 	DeleteObject(bgBrush);
 	DeleteObject(fgBrush);
+}
+
+void Draw_SetScale(uint menuIndex) {
+	if (menuIndex == CUSTOM_SCALE) {
+		//Custom window size dialog
+	}
+	else if(drawScale != scaleArray[menuIndex]) {
+		drawScale = scaleArray[menuIndex];
+		uint border = GetSystemMetrics(SM_CXSIZEFRAME);
+		RECT oldRect = { 0 };
+		GetWindowRect(winHandle, &oldRect);
+		RECT newRect = { 0, 0, (VID_WIDTH * drawScale) + border, (VID_HEIGHT * drawScale) + border };
+		InvalidateRect(winHandle, &newRect, FALSE);
+		AdjustWindowRect(&newRect, winStyle, TRUE);
+		MoveWindow(winHandle, oldRect.left, oldRect.top, newRect.right - newRect.left, newRect.bottom - newRect.top, TRUE);
+		CheckMenuRadioItem(winMenu, ID_WINSIZE_X4, ID_WINSIZE_CUSTOM, ID_WINSIZE_X4 + menuIndex, MF_BYCOMMAND);
+		scaleIndex = menuIndex;
+	}
 }
