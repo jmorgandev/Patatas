@@ -6,6 +6,7 @@
 #define IDD_ABOUT                       102
 #define IDD_MEMORY                      103
 #define IDD_REGISTER                    104
+#define IDD_CUSTOMSIZE                  112
 #define IDC_GITHUB                      1001
 #define IDC_WIKI                        1002
 #define IDC_VERSION                     1003
@@ -38,6 +39,8 @@
 #define IDC_REG_VF2                     1059
 #define IDC_REG_SP                      1060
 #define IDC_STACK_LIST                  1061
+#define IDC_EDITSCALE                   1066
+#define IDC_PIXELSIZE                   1067
 #define ID_FILE_OPENROM                 40001
 #define ID_FILE_CLOSE                   40002
 #define ID_FILE_RECENT                  40003
@@ -81,9 +84,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        112
+#define _APS_NEXT_RESOURCE_VALUE        114
 #define _APS_NEXT_COMMAND_VALUE         40074
-#define _APS_NEXT_CONTROL_VALUE         1066
+#define _APS_NEXT_CONTROL_VALUE         1068
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

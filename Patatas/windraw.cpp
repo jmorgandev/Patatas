@@ -1,6 +1,7 @@
 #include "windraw.h"
 #include "chip8.h"
 #include "resource.h"
+#include "dialog_customsize.h"
 
 uint drawScale = 12;
 uint scaleIndex = 2;
@@ -78,18 +79,25 @@ void Draw_Exit() {
 
 void Draw_SetScale(uint menuIndex) {
 	if (menuIndex == CUSTOM_SCALE) {
-		//Custom window size dialog
+		INT result = DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_CUSTOMSIZE), winHandle, DialogProc_CustomSize);
+		if (result == -1) NotifyError();
+		Draw_RefreshWindow();
+		CheckMenuRadioItem(winMenu, ID_WINSIZE_X4, ID_WINSIZE_CUSTOM, ID_WINSIZE_CUSTOM, MF_BYCOMMAND);
 	}
 	else if(drawScale != scaleArray[menuIndex]) {
 		drawScale = scaleArray[menuIndex];
-		uint border = GetSystemMetrics(SM_CXSIZEFRAME);
-		RECT oldRect = { 0 };
-		GetWindowRect(winHandle, &oldRect);
-		RECT newRect = { 0, 0, (VID_WIDTH * drawScale) + border, (VID_HEIGHT * drawScale) + border };
-		InvalidateRect(winHandle, &newRect, FALSE);
-		AdjustWindowRect(&newRect, winStyle, TRUE);
-		MoveWindow(winHandle, oldRect.left, oldRect.top, newRect.right - newRect.left, newRect.bottom - newRect.top, TRUE);
+		Draw_RefreshWindow();
 		CheckMenuRadioItem(winMenu, ID_WINSIZE_X4, ID_WINSIZE_CUSTOM, ID_WINSIZE_X4 + menuIndex, MF_BYCOMMAND);
 		scaleIndex = menuIndex;
 	}
+}
+
+void Draw_RefreshWindow() {
+	uint border = GetSystemMetrics(SM_CXSIZEFRAME);
+	RECT oldRect = { 0 };
+	GetWindowRect(winHandle, &oldRect);
+	RECT newRect = { 0, 0, (VID_WIDTH * drawScale) + border, (VID_HEIGHT * drawScale) + border };
+	InvalidateRect(winHandle, &newRect, FALSE);
+	AdjustWindowRect(&newRect, winStyle, TRUE);
+	MoveWindow(winHandle, oldRect.left, oldRect.top, newRect.right - newRect.left, newRect.bottom - newRect.top, TRUE);
 }

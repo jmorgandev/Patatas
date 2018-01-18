@@ -19,6 +19,7 @@ void Draw_SetColors(uint bg, uint fg);
 void Draw_Exit();
 void Draw_PaintFrame(HDC deviceContext);
 void Draw_SetScale(uint menuIndex);
+void Draw_RefreshWindow();
 
 
 #endif

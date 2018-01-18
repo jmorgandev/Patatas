@@ -60,6 +60,9 @@
     <ClCompile Include="winmain.cpp">
       <Filter>Source Files\main</Filter>
     </ClCompile>
+    <ClCompile Include="dialog_customsize.cpp">
+      <Filter>Source Files\dialog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="c8font.h">
       <Filter>Header Files\chip8</Filter>
+    </ClInclude>
+    <ClInclude Include="dialog_customsize.h">
+      <Filter>Header Files\dialog</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

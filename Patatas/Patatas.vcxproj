@@ -113,6 +113,7 @@
   <ItemGroup>
     <ClCompile Include="chip8.cpp" />
     <ClCompile Include="dialog_about.cpp" />
+    <ClCompile Include="dialog_customsize.cpp" />
     <ClCompile Include="dialog_file.cpp" />
     <ClCompile Include="dialog_memory.cpp" />
     <ClCompile Include="dialog_register.cpp" />
@@ -124,6 +125,7 @@
   <ItemGroup>
     <ClInclude Include="c8font.h" />
     <ClInclude Include="chip8.h" />
+    <ClInclude Include="dialog_customsize.h" />
     <ClInclude Include="modeless_dialog.h" />
     <ClInclude Include="dialog_about.h" />
     <ClInclude Include="dialog_file.h" />
