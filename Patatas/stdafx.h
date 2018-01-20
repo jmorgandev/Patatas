@@ -68,6 +68,9 @@ uint StrToHex(const char* str);
 
 void PostCommand(HWND hwnd, word cmd, LPARAM lParam);
 
+uint ClampMin(uint value, uint min);
+uint ClampPos(int value);
+
 #define IDC_REDRAW (WM_USER + 1)
 #endif
 

@@ -41,13 +41,14 @@ struct c8_State {
 };
 extern c8_State c8;
 
-extern uint cyclesPerSecond;
-extern double cycleFreq;
+extern const double cycleFreq;
+extern const double tickFreq;
 
 bool Chip8_Init();
 bool Chip8_LoadProgram(const char* path);
 void Chip8_Reset();
 void Chip8_Cycle();
+void Chip8_Tick();
 
 void Chip8_TestProgram();
 #endif

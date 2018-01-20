@@ -123,7 +123,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Input_Init();
 
 	double lastTime = (double)GetTickCount();
-	double accumulator = 0;
+	double cycleTime = 0;
+	double tickTime = 0;
 
 	Chip8_TestProgram();
 	
@@ -137,13 +138,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 
 		double currentTime = (double)GetTickCount();
-		accumulator += (currentTime - lastTime);
+		cycleTime += (currentTime - lastTime);
+		tickTime += (currentTime - lastTime);
 		lastTime = currentTime;
 
-		while (accumulator >= cycleFreq) {
+		while (cycleTime >= cycleFreq) {
 			Chip8_Cycle();
 			if (c8.displayUpdate) Draw_PaintFrame(deviceContext);
-			accumulator -= cycleFreq;
+			cycleTime -= cycleFreq;
+		}
+
+		while (tickTime >= tickFreq) {
+			Chip8_Tick();
+			tickTime -= tickFreq;
 		}
 	}
 

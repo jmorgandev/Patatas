@@ -69,24 +69,23 @@
 #define ID_CONFIG_COLORS                40026
 #define ID_VIEW_REGISTERS               40027
 #define ID_VIEW_MEMORY                  40028
-#define ID_VIEW_LOG                     40029
-#define ID_HELP_SPECS                   40030
-#define ID_HELP_OPCODES                 40031
-#define ID_HELP_ABOUT                   40032
-#define ID_WINSIZE_X4                   40033
-#define ID_WINSIZE_X8                   40034
-#define ID_WINSIZE_X12                  40035
-#define ID_WINSIZE_X16                  40036
-#define ID_WINSIZE_X20                  40037
-#define ID_WINSIZE_CUSTOM               40038
+#define ID_HELP_SPECS                   40029
+#define ID_HELP_OPCODES                 40030
+#define ID_HELP_ABOUT                   40031
+#define ID_WINSIZE_X4                   40032
+#define ID_WINSIZE_X8                   40033
+#define ID_WINSIZE_X12                  40034
+#define ID_WINSIZE_X16                  40035
+#define ID_WINSIZE_X20                  40036
+#define ID_WINSIZE_CUSTOM               40037
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        114
+#define _APS_NEXT_RESOURCE_VALUE        116
 #define _APS_NEXT_COMMAND_VALUE         40074
-#define _APS_NEXT_CONTROL_VALUE         1068
+#define _APS_NEXT_CONTROL_VALUE         1069
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

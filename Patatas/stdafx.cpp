@@ -37,3 +37,13 @@ uint StrToHex(const char* str) {
 void PostCommand(HWND hwnd, word cmd, LPARAM lParam) {
 	PostMessage(hwnd, WM_COMMAND, cmd, lParam);
 }
+
+uint ClampMin(uint value, uint min) {
+	if (value < min) return min;
+	else return value;
+}
+
+uint ClampPos(uint value) {
+	if (value < 0) return 0;
+	else return value;
+}

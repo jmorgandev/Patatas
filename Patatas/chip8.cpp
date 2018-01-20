@@ -11,8 +11,10 @@ c8_State c8 = { 0 };
 
 const char* loadedProgram = nullptr;
 
-uint cyclesPerSecond = 500;
-double cycleFreq = 1000.0 / cyclesPerSecond;
+const uint cyclesPerSecond = 500;
+const uint ticksPerSecond = 60;
+const double cycleFreq = 1000.0 / cyclesPerSecond;
+const double tickFreq = 1000.0 / ticksPerSecond;
 
 bool Chip8_Init() {
 	Chip8_Reset();
@@ -286,6 +288,11 @@ void Chip8_Cycle() {
 		break;
 	}
 	c8.PC += 2;
+}
+
+void Chip8_Tick() {
+	c8.DT = ClampPos(c8.DT - 1);
+	c8.ST = ClampPos(c8.ST - 1);
 }
 
 void Chip8_TestProgram() {
