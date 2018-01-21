@@ -9,6 +9,7 @@
 #define IDD_CUSTOMSIZE                  112
 #define IDD_OPSETTINGS                  116
 #define IDD_CUSTOMSPEED                 117
+#define IDR_ACCELERATOR1                118
 #define IDC_GITHUB                      1001
 #define IDC_WIKI                        1002
 #define IDC_VERSION                     1003
@@ -87,8 +88,8 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        118
-#define _APS_NEXT_COMMAND_VALUE         40081
+#define _APS_NEXT_RESOURCE_VALUE        119
+#define _APS_NEXT_COMMAND_VALUE         40083
 #define _APS_NEXT_CONTROL_VALUE         1071
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
