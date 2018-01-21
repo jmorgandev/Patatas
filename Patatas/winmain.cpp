@@ -15,6 +15,7 @@ HWND modeless_dialogs[DLG_COUNT];
 #include "dialog_about.h"
 #include "dialog_file.h"
 #include "dialog_opsettings.h"
+#include "dialog_customspeed.h"
 
 #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' "\
 		"version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -199,6 +200,10 @@ void HandleCommand(HWND hwnd, word cmd) {
 		} break;
 	case ID_HELP_ABOUT: {
 			INT result = DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_ABOUT), hwnd, DialogProc_About);
+			if (result == -1) NotifyError();
+		} break;
+	case ID_SPEED_CUSTOM: {
+			INT result = DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_CUSTOMSPEED), hwnd, DialogProc_CustomSpeed);
 			if (result == -1) NotifyError();
 		} break;
 	case ID_WINSIZE_X4:

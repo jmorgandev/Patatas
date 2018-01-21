@@ -12,9 +12,9 @@ c8_Settings opcodeSettings = { 0 };
 
 const char* loadedProgram = nullptr;
 
-const uint cyclesPerSecond = 500;
+uint cyclesPerSecond = 500;
 const uint ticksPerSecond = 60;
-const double cycleFreq = 1000.0 / cyclesPerSecond;
+double cycleFreq = 1000.0 / cyclesPerSecond;
 const double tickFreq = 1000.0 / ticksPerSecond;
 
 bool Chip8_Init() {
@@ -56,6 +56,11 @@ bool Chip8_LoadProgram(const char* path) {
 	file.seekg(std::ios::beg);
 	file.read((char*)c8.memory + PROGRAM_START, length);
 	file.close();
+}
+
+void Chip8_SetSpeed(uint cps) {
+	cyclesPerSecond = cps;
+	cycleFreq = 1000.0 / cyclesPerSecond;
 }
 
 void Chip8_Cycle() {

@@ -8,6 +8,7 @@
 #define IDD_REGISTER                    104
 #define IDD_CUSTOMSIZE                  112
 #define IDD_OPSETTINGS                  116
+#define IDD_CUSTOMSPEED                 117
 #define IDC_GITHUB                      1001
 #define IDC_WIKI                        1002
 #define IDC_VERSION                     1003
@@ -44,6 +45,7 @@
 #define IDC_PIXELSIZE                   1067
 #define IDC_CHECK1                      1069
 #define IDC_CHECK2                      1070
+#define IDC_EDITSPEED                   1070
 #define IDC_CHECK3                      1071
 #define ID_FILE_OPENROM                 40001
 #define ID_FILE_CLOSE                   40002
@@ -64,9 +66,6 @@
 #define ID_CHIP8_PAUSE                  40017
 #define ID_CHIP8_STEP                   40018
 #define ID_CHIP8_RESUME                 40019
-#define ID_SPEED_250                    40020
-#define ID_SPEED_500                    40021
-#define ID_SPEED_750                    40022
 #define ID_SPEED_CUSTOM                 40023
 #define ID_CONFIG_KEYMAP                40024
 #define ID_CONFIG_SOUND                 40025
@@ -89,8 +88,8 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        118
-#define _APS_NEXT_COMMAND_VALUE         40076
-#define _APS_NEXT_CONTROL_VALUE         1070
+#define _APS_NEXT_COMMAND_VALUE         40081
+#define _APS_NEXT_CONTROL_VALUE         1071
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

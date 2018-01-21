@@ -48,7 +48,8 @@ struct c8_Settings {
 };
 extern c8_Settings opcodeSettings;
 
-extern const double cycleFreq;
+extern uint cyclesPerSecond;
+extern double cycleFreq;
 extern const double tickFreq;
 
 bool Chip8_Init();
@@ -56,6 +57,6 @@ bool Chip8_LoadProgram(const char* path);
 void Chip8_Reset();
 void Chip8_Cycle();
 void Chip8_Tick();
-
+void Chip8_SetSpeed(uint cps);
 void Chip8_TestProgram();
 #endif

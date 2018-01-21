@@ -66,6 +66,9 @@
     <ClCompile Include="dialog_opsettings.cpp">
       <Filter>Source Files\dialog</Filter>
     </ClCompile>
+    <ClCompile Include="dialog_customspeed.cpp">
+      <Filter>Source Files\dialog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -105,6 +108,9 @@
       <Filter>Header Files\dialog</Filter>
     </ClInclude>
     <ClInclude Include="dialog_opsettings.h">
+      <Filter>Header Files\dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="dialog_customspeed.h">
       <Filter>Header Files\dialog</Filter>
     </ClInclude>
   </ItemGroup>
