@@ -37,7 +37,8 @@ struct c8_State {
 	word I, PC, SP;
 
 	bool displayUpdate;
-	bool keyWait;
+	bool tickBlock;
+	bool keyBlock;
 };
 extern c8_State c8;
 

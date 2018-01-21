@@ -40,7 +40,8 @@ void Chip8_Reset() {
 	c8.SP = 0;
 	c8.I = 0;
 	c8.displayUpdate = true;
-	c8.keyWait = false;
+	c8.tickBlock = false;
+	c8.keyBlock = false;
 }
 
 bool Chip8_LoadProgram(const char* path) {
@@ -64,7 +65,7 @@ void Chip8_SetSpeed(uint cps) {
 }
 
 void Chip8_Cycle() {
-	if (c8.keyWait) return;
+	if (c8.keyBlock || c8.tickBlock) return;
 	word opcode = (c8.memory[c8.PC] << 8) | (c8.memory[c8.PC + 1]);
 	
 	switch (opcode >> 12) {
@@ -152,8 +153,14 @@ void Chip8_Cycle() {
 		case 0x6:
 			//Store the value of VY shifted right one bit in VX.
 			//Set VF to the least significant bit prior to the shift
-			c8.V[0xF] = (c8.V[(opcode & 0xF0) >> 4] & 1);
-			c8.V[(opcode & 0xF00) >> 8] = c8.V[(opcode & 0xF0) >> 4] >> 1;
+			if (opcodeSettings.shiftInPlace) {
+				c8.V[0xF] = (c8.V[(opcode & 0xF00) >> 8] & 1);
+				c8.V[(opcode & 0xF00) >> 8] = c8.V[(opcode & 0xF00) >> 8] >> 1;
+			}
+			else {
+				c8.V[0xF] = (c8.V[(opcode & 0xF0) >> 4] & 1);
+				c8.V[(opcode & 0xF00) >> 8] = c8.V[(opcode & 0xF0) >> 4] >> 1;
+			}
 			break;
 		case 0x7:
 			//Set VX to the value of VY minus VX. Set VF to 0 if a borrow
@@ -164,8 +171,14 @@ void Chip8_Cycle() {
 		case 0xE:
 			//Store the value of VY shifted left one bit in VX.
 			//Set VF to the most significant bit prior to the shift
-			c8.V[0xF] = (c8.V[(opcode & 0xF0) >> 4] & 0x80);
-			c8.V[(opcode & 0xF00) >> 8] = c8.V[(opcode & 0xF0) >> 4] << 1;
+			if (opcodeSettings.shiftInPlace) {
+				c8.V[0xF] = (c8.V[(opcode & 0xF00) >> 8] & 0x80);
+				c8.V[(opcode & 0xF00) >> 8] = c8.V[(opcode & 0xF00) >> 8] << 1;
+			}
+			else {
+				c8.V[0xF] = (c8.V[(opcode & 0xF0) >> 4] & 0x80);
+				c8.V[(opcode & 0xF00) >> 8] = c8.V[(opcode & 0xF0) >> 4] << 1;
+			}
 			break;
 		default:
 			//exception
@@ -202,7 +215,14 @@ void Chip8_Cycle() {
 		uint yPos = c8.V[(opcode & 0xF0) >> 4];
 		uint bytes = opcode & 0xF;
 
-		if (bytes == 0) break; //Or throw exception...
+		if (bytes == 0) {
+			if (opcodeSettings.emptyDrawSync) {
+				c8.tickBlock = true;
+			}
+			else {
+				break; //Throw exception
+			}
+		}
 
 		for (uint row = 0; row < bytes; row++) {
 			uint pixelStrip = c8.memory[c8.I + row];
@@ -243,7 +263,7 @@ void Chip8_Cycle() {
 			break;
 		case 0x0A:
 			//Wait for a keypress and store the result in VX
-			c8.keyWait = true;
+			c8.keyBlock = true;
 			break;
 		case 0x15:
 			//Set the delay timer to the value of VX
@@ -276,12 +296,18 @@ void Chip8_Cycle() {
 			for (uint i = 0; i <= (opcode & 0xF00) >> 8; ++i) {
 				c8.memory[c8.I + i] = c8.V[i];
 			}
+			if (!opcodeSettings.fixedMemoryAccess) {
+				c8.I = c8.I + ((opcode & 0xF00) >> 8) + 1;
+			}
 			break;
 		case 0x65:
 			//Fill registers V0 to VX inclusive with the values stored in memory
 			//starting at address I. I is set to I + X + 1 after operation.
 			for (uint i = 0; i <= (opcode & 0xF00) >> 8; ++i) {
 				c8.V[i] = c8.memory[c8.I + i];
+			}
+			if (!opcodeSettings.fixedMemoryAccess) {
+				c8.I = c8.I + ((opcode & 0xF00) >> 8) + 1;
 			}
 			break;
 		default:
@@ -299,6 +325,7 @@ void Chip8_Cycle() {
 void Chip8_Tick() {
 	c8.DT = ClampPos(c8.DT - 1);
 	c8.ST = ClampPos(c8.ST - 1);
+	c8.tickBlock = false;
 }
 
 void Chip8_TestProgram() {
@@ -308,6 +335,7 @@ void Chip8_TestProgram() {
 		0x60, VID_WIDTH - 4,
 		0x61, VID_HEIGHT - 5,
 		0xD0, 0x15,
+		0xA2, 0x00,
 		0xFF, 0x0A
 	};
 
