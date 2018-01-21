@@ -63,6 +63,9 @@
     <ClCompile Include="dialog_customsize.cpp">
       <Filter>Source Files\dialog</Filter>
     </ClCompile>
+    <ClCompile Include="dialog_opsettings.cpp">
+      <Filter>Source Files\dialog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -99,6 +102,9 @@
       <Filter>Header Files\chip8</Filter>
     </ClInclude>
     <ClInclude Include="dialog_customsize.h">
+      <Filter>Header Files\dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="dialog_opsettings.h">
       <Filter>Header Files\dialog</Filter>
     </ClInclude>
   </ItemGroup>

@@ -116,6 +116,7 @@
     <ClCompile Include="dialog_customsize.cpp" />
     <ClCompile Include="dialog_file.cpp" />
     <ClCompile Include="dialog_memory.cpp" />
+    <ClCompile Include="dialog_opsettings.cpp" />
     <ClCompile Include="dialog_register.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="windraw.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="c8font.h" />
     <ClInclude Include="chip8.h" />
     <ClInclude Include="dialog_customsize.h" />
+    <ClInclude Include="dialog_opsettings.h" />
     <ClInclude Include="modeless_dialog.h" />
     <ClInclude Include="dialog_about.h" />
     <ClInclude Include="dialog_file.h" />

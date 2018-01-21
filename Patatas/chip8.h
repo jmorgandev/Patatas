@@ -41,6 +41,13 @@ struct c8_State {
 };
 extern c8_State c8;
 
+struct c8_Settings {
+	bool shiftInPlace;
+	bool fixedMemoryAccess;
+	bool emptyDrawSync;
+};
+extern c8_Settings opcodeSettings;
+
 extern const double cycleFreq;
 extern const double tickFreq;
 

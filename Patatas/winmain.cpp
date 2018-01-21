@@ -14,6 +14,7 @@ HWND modeless_dialogs[DLG_COUNT];
 
 #include "dialog_about.h"
 #include "dialog_file.h"
+#include "dialog_opsettings.h"
 
 #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' "\
 		"version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -142,15 +143,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		tickTime += (currentTime - lastTime);
 		lastTime = currentTime;
 
-		while (cycleTime >= cycleFreq) {
-			Chip8_Cycle();
-			if (c8.displayUpdate) Draw_PaintFrame(deviceContext);
-			cycleTime -= cycleFreq;
-		}
+		if (cycleTime >= cycleFreq || tickTime >= tickFreq) {
+			while (cycleTime >= cycleFreq) {
+				Chip8_Cycle();
+				if (c8.displayUpdate) Draw_PaintFrame(deviceContext);
+				cycleTime -= cycleFreq;
+			}
 
-		while (tickTime >= tickFreq) {
-			Chip8_Tick();
-			tickTime -= tickFreq;
+			while (tickTime >= tickFreq) {
+				Chip8_Tick();
+				tickTime -= tickFreq;
+			}
+		}
+		else {
+			//Sleep until next cycle/tick?
 		}
 	}
 
@@ -186,6 +192,10 @@ void HandleCommand(HWND hwnd, word cmd) {
 				ShowWindow(dlg, SW_SHOW);
 				modeless_dialogs[DLG_REGISTER] = dlg;
 			}
+		} break;
+	case ID_CHIP8_SETTINGS: {
+			INT result = DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_OPSETTINGS), hwnd, DialogProc_OpcodeSettings);
+			if (result == -1) NotifyError();
 		} break;
 	case ID_HELP_ABOUT: {
 			INT result = DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_ABOUT), hwnd, DialogProc_About);

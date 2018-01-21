@@ -8,6 +8,7 @@
 #define PROGRAM_SIZE (MEMORY_SIZE - PROGRAM_START)
 
 c8_State c8 = { 0 };
+c8_Settings opcodeSettings = { 0 };
 
 const char* loadedProgram = nullptr;
 

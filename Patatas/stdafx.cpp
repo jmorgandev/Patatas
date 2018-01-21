@@ -43,7 +43,7 @@ uint ClampMin(uint value, uint min) {
 	else return value;
 }
 
-uint ClampPos(uint value) {
+uint ClampPos(int value) {
 	if (value < 0) return 0;
 	else return value;
 }
