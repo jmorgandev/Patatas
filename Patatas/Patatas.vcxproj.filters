@@ -83,9 +83,6 @@
     <ClInclude Include="dialog_memory.h">
       <Filter>Header Files\dialog</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="dialog_register.h">
       <Filter>Header Files\dialog</Filter>
     </ClInclude>
@@ -112,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="dialog_customspeed.h">
       <Filter>Header Files\dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

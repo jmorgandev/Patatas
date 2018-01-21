@@ -114,6 +114,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 	}
 
+	HACCEL accel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_ACCELERATOR1));
+
 	winMenu = GetMenu(winHandle);
 	CheckMenuRadioItem(winMenu, ID_WINSIZE_X4, ID_WINSIZE_CUSTOM, ID_WINSIZE_X4 + scaleIndex, MF_BYCOMMAND);
 
@@ -133,7 +135,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	while (running) {
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			if (msg.message == WM_QUIT) running = false;
-			else if (!MessageForDialog(&msg)) {
+			else if (!MessageForDialog(&msg) && !TranslateAccelerator(winHandle, accel, &msg)) {
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			}
