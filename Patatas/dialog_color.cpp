@@ -63,10 +63,13 @@ INT_PTR CALLBACK DialogProc_Color(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 
 			wsprintf(buffer, "%i", newColorBG.r);
 			SetDlgItemText(hwnd, IDC_RED2, buffer);
+			SendDlgItemMessage(hwnd, IDC_RED2, EM_LIMITTEXT, 3, NULL);
 			wsprintf(buffer, "%i", newColorBG.g);
 			SetDlgItemText(hwnd, IDC_GREEN2, buffer);
+			SendDlgItemMessage(hwnd, IDC_GREEN2, EM_LIMITTEXT, 3, NULL);
 			wsprintf(buffer, "%i", newColorBG.b);
 			SetDlgItemText(hwnd, IDC_BLUE2, buffer);
+			SendDlgItemMessage(hwnd, IDC_BLUE2, EM_LIMITTEXT, 3, NULL);
 
 			brushFG = CreateSolidBrush(RGB(newColorFG.r, newColorFG.g, newColorFG.b));
 			if (brushFG == NULL) {
@@ -79,7 +82,74 @@ INT_PTR CALLBACK DialogProc_Color(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 				EndDialog(hwnd, FALSE);
 			}
 		} break;
-	case WM_COMMAND:
+	case WM_COMMAND: {
+			uint controlID = LOWORD(wParam);
+			if (HIWORD(wParam) == EN_CHANGE) {
+				char buffer[4];
+				GetDlgItemText(hwnd, controlID, buffer, 4);
+				uint value = atoi(buffer);
+				if (buffer[0] == NULL) {
+					MessageBeep(MB_ICONEXCLAMATION);
+					SetDlgItemText(hwnd, controlID, "0");
+				}
+				else if (value > 255) {
+					MessageBeep(MB_ICONEXCLAMATION);
+					SetDlgItemText(hwnd, controlID, "255");
+				}
+				if (controlID == IDC_RED || controlID == IDC_GREEN || controlID == IDC_BLUE) {
+					GetDlgItemText(hwnd, IDC_RED, buffer, 4);
+					if (buffer[0] == NULL) break;
+					BYTE r = atoi(buffer);
+					GetDlgItemText(hwnd, IDC_GREEN, buffer, 4);
+					if (buffer[0] == NULL) break;
+					BYTE g = atoi(buffer);
+					GetDlgItemText(hwnd, IDC_BLUE, buffer, 4);
+					if (buffer[0] == NULL) break;
+					BYTE b = atoi(buffer);
+
+					DeleteObject(brushFG);
+					brushFG = CreateSolidBrush(RGB(r, g, b));
+					if (brushFG == NULL) {
+						MessageBox(hwnd, "Could not create FG Brush", "Error", MB_OK | MB_ICONERROR);
+						EndDialog(hwnd, FALSE);
+					}
+					newColorFG = { r, g, b };
+					SendMessage(GetDlgItem(hwnd, IDC_FGCOLOR), WM_PAINT, 0, 0);
+					RECT rect;
+					GetClientRect(previewFG, &rect);
+					InvalidateRect(previewFG, &rect, TRUE);
+				}
+				else {
+					GetDlgItemText(hwnd, IDC_RED2, buffer, 4);
+					if (buffer[0] == NULL) break;
+					BYTE r = atoi(buffer);
+					GetDlgItemText(hwnd, IDC_GREEN2, buffer, 4);
+					if (buffer[0] == NULL) break;
+					BYTE g = atoi(buffer);
+					GetDlgItemText(hwnd, IDC_BLUE2, buffer, 4);
+					if (buffer[0] == NULL) break;
+					BYTE b = atoi(buffer);
+
+					DeleteObject(brushBG);
+					brushBG = CreateSolidBrush(RGB(r, g, b));
+					if (brushFG == NULL) {
+						MessageBox(hwnd, "Could not create FG Brush", "Error", MB_OK | MB_ICONERROR);
+						EndDialog(hwnd, FALSE);
+					}
+					newColorBG = { r, g, b };
+					RECT rect;
+					GetClientRect(previewBG, &rect);
+					InvalidateRect(previewBG, &rect, TRUE);
+				}
+			}
+			else if (controlID == IDOK) {
+				Draw_SetColors(newColorBG, newColorFG);
+				EndDialog(hwnd, IDOK);
+			}
+			else if (controlID == IDCANCEL) {
+				EndDialog(hwnd, IDOK);
+			}
+		}
 		break;
 	case WM_DESTROY:
 		if (brushBG != NULL) DeleteObject(brushBG);

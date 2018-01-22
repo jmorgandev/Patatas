@@ -60,30 +60,44 @@ COLOR Draw_GetColorFG() {
 	return c;
 }
 
-void Draw_SetColorBG(COLOR c) {
-	uint newColor = (c.b << 16) & (c.g << 8) & c.r;
+void Draw_SetColorBG(COLOR c, bool redraw) {
+	uint newColor = RGB(c.r, c.g, c.b);
 	HBRUSH newBrush = CreateSolidBrush(newColor);
 	if (newBrush == NULL) return;
 	if(bgBrush != NULL) DeleteObject(bgBrush);
 	bgBrush = newBrush;
 	bgColor = newColor;
+	if (redraw) {
+		RECT rect = { 0 };
+		GetClientRect(winHandle, &rect);
+		InvalidateRect(winHandle, &rect, FALSE);
+	}
 }
-void Draw_SetColorFG(COLOR c) {
-	uint newColor = (c.b << 16) & (c.g << 8) & c.r;
+void Draw_SetColorFG(COLOR c, bool redraw) {
+	uint newColor = RGB(c.r, c.g, c.b);
 	HBRUSH newBrush = CreateSolidBrush(newColor);
 	if (newBrush == NULL) return;
 	if (fgBrush != NULL) DeleteObject(fgBrush);
 	fgBrush = newBrush;
 	fgColor = newColor;
+	if (redraw) {
+		RECT rect = { 0 };
+		GetClientRect(winHandle, &rect);
+		InvalidateRect(winHandle, &rect, FALSE);
+	}
 }
-void Draw_SetColors(COLOR bg, COLOR fg) {
-	Draw_SetColorBG(bg);
-	Draw_SetColorFG(fg);
+void Draw_SetColors(COLOR bg, COLOR fg, bool redraw) {
+	Draw_SetColorBG(bg, false);
+	Draw_SetColorFG(fg, false);
+	if (redraw) {
+		RECT rect = { 0 };
+		GetClientRect(winHandle, &rect);
+		InvalidateRect(winHandle, &rect, FALSE);
+	}
 }
 
 void Draw_PaintFrame(HDC deviceContext) {
 	RECT rect = {0, 0, VID_WIDTH * drawScale, VID_HEIGHT * drawScale };
-
 	//Fill the background
 	FillRect(deviceContext, &rect, bgBrush);
 
