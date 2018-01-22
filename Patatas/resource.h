@@ -55,6 +55,7 @@
 #define IDC_FGCOLOR                     1076
 #define IDC_KEY0                        1077
 #define IDC_KEY1                        1078
+#define IDC_PRESETCOLOR                 1078
 #define IDC_KEY2                        1079
 #define IDC_KEY3                        1080
 #define IDC_KEY4                        1081
@@ -67,7 +68,6 @@
 #define IDC_KEY8                        1085
 #define IDC_BGCOLOR                     1085
 #define IDC_KEY9                        1086
-#define IDC_BGCOLOR2                    1086
 #define IDC_KEY10                       1087
 #define IDC_KEY11                       1088
 #define IDC_KEY12                       1089
@@ -116,7 +116,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        122
 #define _APS_NEXT_COMMAND_VALUE         40093
-#define _APS_NEXT_CONTROL_VALUE         1078
+#define _APS_NEXT_CONTROL_VALUE         1079
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
