@@ -1,22 +1,13 @@
 #include "input.h"
 #include "stdafx.h"
-#include "chip8.h"
 #include <memory>
 
 #include <Windows.h>
 
-#define WM_KEYDOWN    0x0100
-
 uint keyBinds[CHIP8_KEY_COUNT];
 
-uint GetChip8Key(uint key) {
-	for (uint i = 0; i < CHIP8_KEY_COUNT; ++i)
-		if (keyBinds[i] == key) return i;
-	return NULL_KEY;
-}
-
-bool Input_Init() {
-
+static void LoadDefaultKeyBinds() {
+	keyBinds[CK_0] = VK_X;
 	keyBinds[CK_1] = VK_1;
 	keyBinds[CK_2] = VK_2;
 	keyBinds[CK_3] = VK_3;
@@ -30,10 +21,18 @@ bool Input_Init() {
 	keyBinds[CK_9] = VK_D;
 	keyBinds[CK_E] = VK_F;
 	keyBinds[CK_A] = VK_Z;
-	keyBinds[CK_0] = VK_X;
 	keyBinds[CK_B] = VK_C;
 	keyBinds[CK_F] = VK_V;
+}
 
+static uint GetChip8Key(uint key) {
+	for (uint i = 0; i < CHIP8_KEY_COUNT; ++i)
+		if (keyBinds[i] == key) return i;
+	return NULL_KEY;
+}
+
+bool Input_Init() {
+	LoadDefaultKeyBinds();
 	std::memset(c8.keys, 0, CHIP8_KEY_COUNT);
 
 	return true;

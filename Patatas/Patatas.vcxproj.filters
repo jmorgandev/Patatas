@@ -69,6 +69,9 @@
     <ClCompile Include="dialog_customspeed.cpp">
       <Filter>Source Files\dialog</Filter>
     </ClCompile>
+    <ClCompile Include="dialog_keymap.cpp">
+      <Filter>Source Files\dialog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dialog_keymap.h">
+      <Filter>Header Files\dialog</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

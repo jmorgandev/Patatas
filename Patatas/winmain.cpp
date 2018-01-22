@@ -16,9 +16,11 @@ HWND modeless_dialogs[DLG_COUNT];
 #include "dialog_file.h"
 #include "dialog_opsettings.h"
 #include "dialog_customspeed.h"
+#include "dialog_keymap.h"
 
 #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' "\
 		"version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#pragma comment(lib, "comctl32.lib")
 
 const char* winClass = "PTS_WINCLASS";
 const char* winTitle = "Patatas";
@@ -226,5 +228,9 @@ void HandleCommand(HWND hwnd, word cmd) {
 	case ID_WINSIZE_CUSTOM:
 		Draw_SetScale(CUSTOM_SCALE);
 		break;
+	case ID_CONFIG_KEYMAP: {
+			INT result = DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_KEYMAP), hwnd, DialogProc_Keymap);
+			if (result == -1) NotifyError();
+		} break;
 	}
 }
