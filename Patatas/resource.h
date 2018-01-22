@@ -11,6 +11,7 @@
 #define IDD_CUSTOMSPEED                 117
 #define IDR_ACCELERATOR1                118
 #define IDD_KEYMAP                      118
+#define IDD_COLOR                       120
 #define IDC_GITHUB                      1001
 #define IDC_WIKI                        1002
 #define IDC_VERSION                     1003
@@ -40,7 +41,6 @@
 #define IDC_REG_ST                      1057
 #define IDC_REG_I                       1058
 #define IDC_REG_PC                      1059
-#define IDC_REG_VF2                     1059
 #define IDC_REG_SP                      1060
 #define IDC_STACK_LIST                  1061
 #define IDC_EDITSCALE                   1066
@@ -49,16 +49,25 @@
 #define IDC_CHECK2                      1070
 #define IDC_EDITSPEED                   1070
 #define IDC_CHECK3                      1071
+#define IDC_RED                         1073
+#define IDC_GREEN                       1074
+#define IDC_BLUE                        1075
+#define IDC_FGCOLOR                     1076
 #define IDC_KEY0                        1077
 #define IDC_KEY1                        1078
 #define IDC_KEY2                        1079
 #define IDC_KEY3                        1080
 #define IDC_KEY4                        1081
 #define IDC_KEY5                        1082
+#define IDC_RED2                        1082
 #define IDC_KEY6                        1083
+#define IDC_GREEN2                      1083
 #define IDC_KEY7                        1084
+#define IDC_BLUE2                       1084
 #define IDC_KEY8                        1085
+#define IDC_BGCOLOR                     1085
 #define IDC_KEY9                        1086
+#define IDC_BGCOLOR2                    1086
 #define IDC_KEY10                       1087
 #define IDC_KEY11                       1088
 #define IDC_KEY12                       1089
@@ -105,9 +114,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        120
+#define _APS_NEXT_RESOURCE_VALUE        122
 #define _APS_NEXT_COMMAND_VALUE         40093
-#define _APS_NEXT_CONTROL_VALUE         1073
+#define _APS_NEXT_CONTROL_VALUE         1078
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

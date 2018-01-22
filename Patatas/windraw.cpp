@@ -6,13 +6,10 @@
 uint drawScale = 12;
 uint scaleIndex = 2;
 
-uint bgColor = 0x362B00; //002B36
-uint fgColor = 0xE3F6FD; //FDF6E3
-HBRUSH bgBrush = NULL;
-HBRUSH fgBrush = NULL;
-
-double framesPerSecond = 60;
-double renderFreq = 1000.0 / 60;
+static uint bgColor = 0x362B00; //002B36
+static uint fgColor = 0xE3F6FD; //FDF6E3
+static HBRUSH bgBrush = NULL;
+static HBRUSH fgBrush = NULL;
 
 static uint scaleArray[5] = {
 	4, 8, 12, 16, 20
@@ -46,6 +43,42 @@ void Draw_SetColors(uint bg, uint fg) {
 	fgColor = fg;
 
 	//Post a paint message...
+}
+
+COLOR Draw_GetColorBG() {
+	COLOR c = { 0 };
+	c.r = (bgColor & 0x0000FF);
+	c.g = (bgColor & 0x00FF00) >> 8;
+	c.b = (bgColor & 0xFF0000) >> 16;
+	return c;
+}
+COLOR Draw_GetColorFG() {
+	COLOR c = { 0 };
+	c.r = (fgColor & 0x0000FF);
+	c.g = (fgColor & 0x00FF00) >> 8;
+	c.b = (fgColor & 0xFF0000) >> 16;
+	return c;
+}
+
+void Draw_SetColorBG(COLOR c) {
+	uint newColor = (c.b << 16) & (c.g << 8) & c.r;
+	HBRUSH newBrush = CreateSolidBrush(newColor);
+	if (newBrush == NULL) return;
+	if(bgBrush != NULL) DeleteObject(bgBrush);
+	bgBrush = newBrush;
+	bgColor = newColor;
+}
+void Draw_SetColorFG(COLOR c) {
+	uint newColor = (c.b << 16) & (c.g << 8) & c.r;
+	HBRUSH newBrush = CreateSolidBrush(newColor);
+	if (newBrush == NULL) return;
+	if (fgBrush != NULL) DeleteObject(fgBrush);
+	fgBrush = newBrush;
+	fgColor = newColor;
+}
+void Draw_SetColors(COLOR bg, COLOR fg) {
+	Draw_SetColorBG(bg);
+	Draw_SetColorFG(fg);
 }
 
 void Draw_PaintFrame(HDC deviceContext) {
