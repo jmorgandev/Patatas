@@ -6,8 +6,8 @@
 uint drawScale = 12;
 uint scaleIndex = 2;
 
-static uint bgColor = 0x362B00; //002B36
-static uint fgColor = 0xE3F6FD; //FDF6E3
+static uint bgColor = 0x000000; //002B36
+static uint fgColor = 0xFFFFFF; //FDF6E3
 static HBRUSH bgBrush = NULL;
 static HBRUSH fgBrush = NULL;
 
