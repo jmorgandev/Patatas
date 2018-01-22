@@ -33,7 +33,9 @@ HWND winHandle = NULL;
 HMENU winMenu = NULL;
 HDC deviceContext = NULL;
 
-bool running = true;
+static bool running = true;
+static bool paused = false;
+static bool stepForward = false;
 
 bool MessageForDialog(MSG* msg) {
 	bool handled = false;
@@ -143,26 +145,38 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				DispatchMessage(&msg);
 			}
 		}
-
-		double currentTime = (double)GetTickCount();
-		cycleTime += (currentTime - lastTime);
-		tickTime += (currentTime - lastTime);
-		lastTime = currentTime;
-
-		if (cycleTime >= cycleFreq || tickTime >= tickFreq) {
-			while (cycleTime >= cycleFreq) {
+		if (paused) {
+			if (stepForward) {
+				cycleTime += cycleFreq;
 				Chip8_Cycle();
-				if (c8.displayUpdate) Draw_PaintFrame(deviceContext);
-				cycleTime -= cycleFreq;
-			}
-
-			while (tickTime >= tickFreq) {
-				Chip8_Tick();
-				tickTime -= tickFreq;
+				if (cycleTime >= tickFreq) {
+					Chip8_Tick();
+					cycleTime -= tickFreq;
+				}
+				stepForward = false;
 			}
 		}
 		else {
-			//Sleep until next cycle/tick?
+			double currentTime = (double)GetTickCount();
+			cycleTime += (currentTime - lastTime);
+			tickTime += (currentTime - lastTime);
+			lastTime = currentTime;
+
+			if (cycleTime >= cycleFreq || tickTime >= tickFreq) {
+				while (cycleTime >= cycleFreq) {
+					Chip8_Cycle();
+					if (c8.displayUpdate) Draw_PaintFrame(deviceContext);
+					cycleTime -= cycleFreq;
+				}
+
+				while (tickTime >= tickFreq) {
+					Chip8_Tick();
+					tickTime -= tickFreq;
+				}
+			}
+			else {
+				//Sleep until next cycle/tick?
+			}
 		}
 	}
 
@@ -237,5 +251,13 @@ void HandleCommand(HWND hwnd, word cmd) {
 			INT result = DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_COLOR), hwnd, DialogProc_Color);
 			if (result == -1) NotifyError();
 		} break;
+	case ID_CHIP8_PAUSE:
+		paused = !paused;
+		break;
+	case ID_CHIP8_STEP:
+		if (paused) stepForward = true;
+		break;
+	case ID_CHIP8_RESET:
+		break;
 	}
 }
