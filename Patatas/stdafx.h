@@ -72,5 +72,13 @@ uint ClampMin(uint value, uint min);
 uint ClampPos(int value);
 
 #define IDC_REDRAW (WM_USER + 1)
+
+constexpr bool BigEndianMachine() {
+	uint test = 1;
+	byte* p = (byte*)&test;
+	return p[0] == 0;
+}
+
+void SwitchEndian(uint size, byte* value);
 #endif
 

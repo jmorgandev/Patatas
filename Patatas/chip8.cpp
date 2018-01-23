@@ -3,6 +3,7 @@
 #include <memory>
 #include <fstream>
 #include <ctime>
+#include "sound.h"
 
 #define PROGRAM_START 0x200
 #define PROGRAM_SIZE (MEMORY_SIZE - PROGRAM_START)
@@ -272,6 +273,7 @@ void Chip8_Cycle() {
 		case 0x18:
 			//Set the sound timer to the value of VX
 			c8.ST = c8.V[(opcode & 0xF00) >> 8];
+			if (c8.ST != 0) Sound_Play();
 			break;
 		case 0x1E:
 			//Add the value stored in VX to I
@@ -324,6 +326,7 @@ void Chip8_Cycle() {
 
 void Chip8_Tick() {
 	c8.DT = ClampPos(c8.DT - 1);
+	if (c8.ST - 1 == 0) Sound_Stop();
 	c8.ST = ClampPos(c8.ST - 1);
 	c8.tickBlock = false;
 }

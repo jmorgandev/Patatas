@@ -63,7 +63,7 @@ static void SetColorTextBG(COLOR c) {
 	SetEditBoxValue(IDC_BLUE2, c.b);
 }
 
-static INT_PTR PreviewPaint(HWND hwnd, WPARAM wParam, LPARAM lParam) {
+static LRESULT PreviewPaint(HWND hwnd, WPARAM wParam, LPARAM lParam) {
 	PAINTSTRUCT ps = { 0 };
 	HDC dc = BeginPaint(hwnd, &ps);
 
@@ -82,7 +82,7 @@ static INT_PTR PreviewPaint(HWND hwnd, WPARAM wParam, LPARAM lParam) {
 	return 0;
 }
 
-static INT_PTR CALLBACK PreviewProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubClass, DWORD_PTR dwRefData) {
+static LRESULT CALLBACK PreviewProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubClass, DWORD_PTR dwRefData) {
 	if (msg == WM_PAINT) {
 		PreviewPaint(hwnd, wParam, lParam);
 		return 0;

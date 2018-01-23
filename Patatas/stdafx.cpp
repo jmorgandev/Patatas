@@ -47,3 +47,11 @@ uint ClampPos(int value) {
 	if (value < 0) return 0;
 	else return value;
 }
+
+void SwitchEndian(uint size, byte* value) {
+	byte result[32];
+	for (uint i = 0; i < size; i++)
+		result[i] = ((byte*)value)[size - i - 1];
+	for (uint i = 0; i < size; i++)
+		((byte*)value)[i] = result[i];
+}

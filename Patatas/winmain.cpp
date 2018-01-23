@@ -6,7 +6,8 @@
 #include "input.h"
 #include "chip8.h"
 #include "resource.h"
-#include "windraw.h"
+#include "windraw.h"#
+#include "sound.h"
 #include <CommCtrl.h>
 
 #include "modeless_dialog.h"
@@ -22,6 +23,7 @@ HWND modeless_dialogs[DLG_COUNT];
 #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' "\
 		"version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #pragma comment(lib, "comctl32.lib")
+#pragma comment(lib, "Winmm.lib")
 
 const char* winClass = "PTS_WINCLASS";
 const char* winTitle = "Patatas";
@@ -130,6 +132,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Chip8_Init();
 	Draw_Init();
 	Input_Init();
+	Sound_Init();
 
 	double lastTime = (double)GetTickCount();
 	double cycleTime = 0;
@@ -168,7 +171,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					if (c8.displayUpdate) Draw_PaintFrame(deviceContext);
 					cycleTime -= cycleFreq;
 				}
-
 				while (tickTime >= tickFreq) {
 					Chip8_Tick();
 					tickTime -= tickFreq;
