@@ -44,7 +44,7 @@ extern c8_State c8;
 
 struct c8_Settings {
 	bool shiftInPlace;
-	bool fixedMemoryAccess;
+	bool storeLoadAdvance;
 	bool emptyDrawSync;
 };
 extern c8_Settings opcodeSettings;

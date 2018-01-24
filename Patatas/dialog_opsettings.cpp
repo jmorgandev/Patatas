@@ -9,14 +9,14 @@ INT_PTR CALLBACK DialogProc_OpcodeSettings(HWND hwnd, UINT msg, WPARAM wParam, L
 	case WM_INITDIALOG:
 		newSettings = opcodeSettings;
 		SendDlgItemMessage(hwnd, IDC_CHECK1, BM_SETCHECK, newSettings.shiftInPlace, 0);
-		SendDlgItemMessage(hwnd, IDC_CHECK2, BM_SETCHECK, newSettings.fixedMemoryAccess, 0);
+		SendDlgItemMessage(hwnd, IDC_CHECK2, BM_SETCHECK, newSettings.storeLoadAdvance, 0);
 		SendDlgItemMessage(hwnd, IDC_CHECK3, BM_SETCHECK, newSettings.emptyDrawSync, 0);
 		break;
 	case WM_COMMAND:
 		switch (LOWORD(wParam)) {
 		case IDOK:
 			newSettings.shiftInPlace = SendDlgItemMessage(hwnd, IDC_CHECK1, BM_GETCHECK, 0, 0);
-			newSettings.fixedMemoryAccess = SendDlgItemMessage(hwnd, IDC_CHECK2, BM_GETCHECK, 0, 0);
+			newSettings.storeLoadAdvance = SendDlgItemMessage(hwnd, IDC_CHECK2, BM_GETCHECK, 0, 0);
 			newSettings.emptyDrawSync = SendDlgItemMessage(hwnd, IDC_CHECK3, BM_GETCHECK, 0, 0);
 			opcodeSettings = newSettings;
 			EndDialog(hwnd, IDOK);

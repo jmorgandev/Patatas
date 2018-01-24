@@ -1,8 +1,8 @@
 #include "input.h"
 #include "stdafx.h"
 #include <memory>
-
 #include <Windows.h>
+#include "console.h"
 
 uint keyBinds[CHIP8_KEY_COUNT];
 
@@ -42,4 +42,7 @@ void Input_KeyEvent(uint type, uint key) {
 	uint chip8Key = GetChip8Key(key);
 	if (chip8Key != NULL)
 		c8.keys[chip8Key] = (type == WM_KEYDOWN) ? true : false;
+
+	if (key == VK_K)
+		Con_Print("SEND HELP FATHER");
 }

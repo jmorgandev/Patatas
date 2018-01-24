@@ -80,98 +80,98 @@ void Chip8_Cycle() {
 	switch (opcode >> 12) {
 	case 0x0:
 		if (opcode == 0x00E0) {
-			Con_Print("%X: Clear display", opcode);
+			Con_Print("%04X: Clear display", opcode);
 			memset(c8.display, NULL, VID_SIZE);
 		}
 		else if(opcode == 0x00EE) {
-			Con_Print("%X: Return from subroutine", opcode);
+			Con_Print("%04X: Return from subroutine", opcode);
 			if (c8.SP - 1 < 0) {
 				Con_Print("[EXCEPTION] SP < 0");
 				PauseEmulation(); return;
 			}
-			c8.PC = c8.stack[c8.SP--];
+			c8.PC = c8.stack[--c8.SP];
 		}
 		else {
-			Con_Print("%X: Undefined opcode");
+			Con_Print("%04X: Undefined opcode", opcode);
 			PauseEmulation(); return;
 		}
 		break;
 	case 0x1:
 		//Jump to address NNN
-		Con_Print("%X: Jump to address %X", opcode, addr);
+		Con_Print("%04X: Jump to address %03X", opcode, addr);
 		c8.PC = addr;
 		break;
 	case 0x2:
 		//Execute subroutine starting at address NNN
-		Con_Print("%X: Call subroutine at address %X", opcode, addr);
+		Con_Print("%04X: Call subroutine at address %03X", opcode, addr);
 		c8.stack[c8.SP++] = c8.PC;
 		c8.PC = addr;
 		break;
 	case 0x3:
 		//Skip the following instruction if the value of VX equals NN
-		Con_Print("%X: Skip next opcode if V%X (%X) == %X", opcode, vx, c8.V[vx], num8);
+		Con_Print("%04X: Skip next opcode if V%X (%02X) == %02X", opcode, vx, c8.V[vx], num8);
 		if (c8.V[vx] == num8) c8.PC += 2;
 		break;
 	case 0x4:
 		//Skip the following instruction if the value of VX is not equal to NN
-		Con_Print("%X: Skip next opcode if V%X (%X) != %X", opcode, vx, c8.V[vx], num8);
+		Con_Print("%04X: Skip next opcode if V%X (%02X) != %02X", opcode, vx, c8.V[vx], num8);
 		if (c8.V[vx] != num8) c8.PC += 2;
 		break;
 	case 0x5:
 		if (opcode & 0xF == 0x0) {
 			//Skip the following instruction if the value of VX is equal to the value of VY
-			Con_Print("%X: Skip next opcode if V%X (%X) == V%X (%i)",
+			Con_Print("%04X: Skip next opcode if V%X (%02X) == V%X (%02X)",
 				opcode, vx, c8.V[vx], vy, c8.V[vy]);
 			if (c8.V[vx] == c8.V[vy]) c8.PC += 2;
 		}
 		else {
-			Con_Print("%X: Undefined opcode");
+			Con_Print("%04X: Undefined opcode", opcode);
 			PauseEmulation(); return;
 		}
 		break;
 	case 0x6:
 		//Store the number NN in VX
-		Con_Print("%X: V%X = %X", opcode, vx, num8);
+		Con_Print("%04X: V%X = %02X", opcode, vx, num8);
 		c8.V[vx] = num8;
 		break;
 	case 0x7:
 		//Add the value NN to VX
-		Con_Print("%X: V%X += %X", opcode, vx, num8);
+		Con_Print("%04X: V%X += %02X", opcode, vx, num8);
 		c8.V[vx] += num8;
 		break;
 	case 0x8:
 		switch (opcode & 0xF) {
 		case 0x0:
 			//Store the value of VY in VX
-			Con_Print("%X: V%X = V%X", opcode, vx, vy);
+			Con_Print("%04X: V%X = V%X", opcode, vx, vy);
 			c8.V[vx] = c8.V[vy];
 			break;
 		case 0x1:
 			//Set VX to VX OR VY
-			Con_Print("%X: V%X = V%X OR V%X", opcode, vx, vx, vy);
+			Con_Print("%04X: V%X = V%X OR V%X", opcode, vx, vx, vy);
 			c8.V[vx] |= c8.V[vy];
 			break;
 		case 0x2:
 			//Set VX to VX AND VY
-			Con_Print("%X: V%X = V%X AND V%X", opcode, vx, vx, vy);
+			Con_Print("%04X: V%X = V%X AND V%X", opcode, vx, vx, vy);
 			c8.V[vx] &= c8.V[vy];
 			break;
 		case 0x3:
 			//Set VX to VX XOR VY
-			Con_Print("%X: V%X = V%X XOR V%X", opcode, vx, vx, vy);
+			Con_Print("%04X: V%X = V%X XOR V%X", opcode, vx, vx, vy);
 			c8.V[vx] ^= c8.V[vy];
 			break;
 		case 0x4:
 			//Add the value of VY to VX. Set VF to 1 if a carry occurs,
 			//otherwise set VF to 0
-			Con_Print("%X: V%X += V%Y, VF = carry", opcode, vy, vx);
+			Con_Print("%04X: V%X += V%X, VF = carry", opcode, vy, vx);
 			c8.V[0xF] = (c8.V[vy] > (0xFF - c8.V[vx])) ? 1 : 0;
 			c8.V[vx] += c8.V[vy];
 			break;
 		case 0x5:
 			//Set VX to the value of VX minus VY. Set VF to 0 if a borrow
 			//occurs, otherwise set VF to 1
-			Con_Print("%X: V%X -= V%X, VF = !borrow", opcode, vx, vy);
+			Con_Print("%04X: V%X -= V%X, VF = !borrow", opcode, vx, vy);
 			c8.V[0xF] = (c8.V[vy] > c8.V[vx]) ? 0 : 1;
 			c8.V[vx] -= c8.V[vy];
 			break;
@@ -179,12 +179,12 @@ void Chip8_Cycle() {
 			//Store the value of VY shifted right one bit in VX.
 			//Set VF to the least significant bit prior to the shift
 			if (opcodeSettings.shiftInPlace) {
-				Con_Print("%X: V%X >>= 1, VF = V%X lsb [Shift In Place]", opcode, vx, vx);
+				Con_Print("%04X: V%X >>= 1, VF = V%X lsb [Shift In Place]", opcode, vx, vx);
 				c8.V[0xF] = (c8.V[vx] & 1);
 				c8.V[vx] = c8.V[vx] >> 1;
 			}
 			else {
-				Con_Print("%X: V%X = V%X >> 1, VF = V%X lsb", opcode, vx, vy, vy);
+				Con_Print("%04X: V%X = V%X >> 1, VF = V%X lsb", opcode, vx, vy, vy);
 				c8.V[0xF] = (c8.V[vy] & 1);
 				c8.V[vx] = c8.V[vy] >> 1;
 			}
@@ -192,7 +192,7 @@ void Chip8_Cycle() {
 		case 0x7:
 			//Set VX to the value of VY minus VX. Set VF to 0 if a borrow
 			//occurs, otherwise set VF to 1
-			Con_Print("%X: V%X = V%X - V%X, VF = !borrow", opcode, vx, vy, vx);
+			Con_Print("%04X: V%X = V%X - V%X, VF = !borrow", opcode, vx, vy, vx);
 			c8.V[0xF] = (c8.V[vx] > c8.V[vy]) ? 0 : 1;
 			c8.V[vx] = c8.V[vy] - c8.V[vx];
 			break;
@@ -200,18 +200,18 @@ void Chip8_Cycle() {
 			//Store the value of VY shifted left one bit in VX.
 			//Set VF to the most significant bit prior to the shift
 			if (opcodeSettings.shiftInPlace) {
-				Con_Print("%X: V%X <<= 1, VF = V%X msb [Shift In Place]", opcode, vx, vx);
+				Con_Print("%04X: V%X <<= 1, VF = V%X msb [Shift In Place]", opcode, vx, vx);
 				c8.V[0xF] = (c8.V[vx] & 0x80);
 				c8.V[vx] = c8.V[vx] << 1;
 			}
 			else {
-				Con_Print("%X: V%X = V%X << 1, VF = V%X msb", opcode, vx, vy, vy);
+				Con_Print("%04X: V%X = V%X << 1, VF = V%X msb", opcode, vx, vy, vy);
 				c8.V[0xF] = (c8.V[vy] & 0x80);
 				c8.V[vx] = c8.V[vy] << 1;
 			}
 			break;
 		default:
-			Con_Print("%X: Undefined opcode");
+			Con_Print("%04X: Undefined opcode", opcode);
 			PauseEmulation(); return;
 		}
 		break;
@@ -219,28 +219,28 @@ void Chip8_Cycle() {
 		if (opcode & 0xF == 0x0) {
 			//Skip the following instruction if the value of register VX is
 			//not equal to the value of register VY
-			Con_Print("%X: Skip next opcode if V%X (%X) != V%X (%X)",
+			Con_Print("%04X: Skip next opcode if V%X (%02X) != V%X (%02X)",
 				opcode, vx, c8.V[vx], vy, c8.V[vy]);
 			if (c8.V[vx] != c8.V[vy]) c8.PC += 2;
 		}
 		else {
-			Con_Print("%X: Undefined opcode");
+			Con_Print("%04X: Undefined opcode", opcode);
 			PauseEmulation(); return;
 		}
 		break;
 	case 0xA:
 		//Store memory address NNN in I
-		Con_Print("%X: Set I to address %X", opcode, addr);
+		Con_Print("%04X: Set I to address %03X", opcode, addr);
 		c8.I = addr;
 		break;
 	case 0xB:
 		//Jump to address NNN + V0
-		Con_Print("%X: Jump to address %X + V0 (%X)", opcode, addr, c8.V[0x0]);
+		Con_Print("%04X: Jump to address %03X + V0 (%02X)", opcode, addr, c8.V[0x0]);
 		c8.PC = addr + c8.V[0x0];
 		break;
 	case 0xC:
 		//Set VX to a random number with a mask of NN
-		Con_Print("%X: V%X = RAND & %X", opcode, vx, num8);
+		Con_Print("%04X: V%X = RAND & %02X", opcode, vx, num8);
 		c8.V[vx] = (rand() % 0xFF) & num8;
 		break;
 	case 0xD: {
@@ -253,10 +253,10 @@ void Chip8_Cycle() {
 
 		if (bytes == 0 && opcodeSettings.emptyDrawSync) {
 			c8.tickBlock = true;
-			Con_Print("%X: Wait for next timer tick [VSYNC]");
+			Con_Print("%04X: Wait for next timer tick [VSYNC]");
 			break;
 		}
-		Con_Print("%X: Draw %X byte sprite at %X X and %X Y, VF = overdraw",
+		Con_Print("%04X: Draw %02X byte sprite at (V%X,V%X), VF = overdraw",
 			opcode, num4, vx, vy);
 
 		for (uint row = 0; row < bytes; row++) {
@@ -278,19 +278,19 @@ void Chip8_Cycle() {
 		if (opcode & 0xFF == 0x9E) {
 			//Skip the following instruction if the key corresponding to
 			//the hex value stored in VX is pressed
-			Con_Print("%X: Skip next opcode if Key value V%X (%X) is pressed",
+			Con_Print("%04X: Skip next opcode if Key value V%X (%02X) is pressed",
 				opcode, vx, c8.V[vx]);
 			if (c8.keys[c8.V[vx]]) c8.PC += 2;
 		}
 		else if (opcode & 0xFF == 0xA1) {
 			//Skip the following instruction if the key corresponding to
 			//the hex value stored in VX is NOT pressed
-			Con_Print("%X: Skip next opcode if Key value V%X (%X) is not pressed",
+			Con_Print("%04X: Skip next opcode if Key value V%X (%02X) is not pressed",
 				opcode, vx, c8.V[vx]);
 			if (!c8.keys[c8.V[vx]]) c8.PC += 2;
 		}
 		else {
-			Con_Print("%X: Undefined opcode");
+			Con_Print("%04X: Undefined opcode", opcode);
 			PauseEmulation(); return;
 		}
 		break;
@@ -298,40 +298,40 @@ void Chip8_Cycle() {
 		switch (opcode & 0xFF) {
 		case 0x07:
 			//Store the current value of the delay timer in VX
-			Con_Print("%X: V%X = DT (%X)", opcode, vx, c8.DT);
+			Con_Print("%04X: V%X = DT (%02X)", opcode, vx, c8.DT);
 			c8.V[vx] = c8.DT;
 			break;
 		case 0x0A:
 			//Wait for a keypress and store the result in VX
-			Con_Print("%X: Wait for a keypress and store value in V%X", opcode, vx);
+			Con_Print("%04X: Wait for a keypress and store value in V%X", opcode, vx);
 			c8.keyBlock = true;
 			break;
 		case 0x15:
 			//Set the delay timer to the value of VX
-			Con_Print("%X: DT = V%X (%X)", opcode, vx, c8.V[vx]);
+			Con_Print("%04X: DT = V%X (%02X)", opcode, vx, c8.V[vx]);
 			c8.DT = c8.V[vx];
 			break;
 		case 0x18:
 			//Set the sound timer to the value of VX
-			Con_Print("%X: ST = V%X (%X)", opcode, vx, c8.V[vx]);
+			Con_Print("%04X: ST = V%X (%02X)", opcode, vx, c8.V[vx]);
 			c8.ST = c8.V[vx];
 			if (c8.ST != 0) Sound_Play();
 			break;
 		case 0x1E:
 			//Add the value stored in VX to I
-			Con_Print("%X: I += V%X (%X)", opcode, vx, c8.V[vx]);
+			Con_Print("%04X: I += V%X (%02X)", opcode, vx, c8.V[vx]);
 			c8.I += c8.V[vx];
 			break;
 		case 0x29:
 			//Set I to the memory address of the sprite data corresponding
 			//to the hex digit stored in register VX
-			Con_Print("%X: I = FONT_SPRITE(V%X)", opcode, vx);
+			Con_Print("%04X: I = FONT_SPRITE(V%X)", opcode, vx);
 			c8.I = c8.V[vx] * CHIP8_FONT_HEIGHT;
 			break;
 		case 0x33: {
 			//Store the binary-coded decimal equivalent of the value stored
 			//in register VX at addresses I, I+1, and I+2
-			Con_Print("%X: Store BCD of V%X at address I (%X)", opcode, vx, c8.I);
+			Con_Print("%04X: Store BCD of V%X at address I (%03X)", opcode, vx, c8.I);
 			c8.memory[c8.I] = (c8.V[vx] / 100);
 			c8.memory[c8.I + 1] = (c8.V[vx] / 10) % 10;
 			c8.memory[c8.I + 2] = (c8.V[vx] % 10);
@@ -342,12 +342,12 @@ void Chip8_Cycle() {
 			for (uint i = 0; i <= vx; ++i) {
 				c8.memory[c8.I + i] = c8.V[i];
 			}
-			if (!opcodeSettings.fixedMemoryAccess) {
-				Con_Print("%X: *I = V0 - V%X, I += %X + 1", opcode, vx, c8.I, vx);
+			if (opcodeSettings.storeLoadAdvance) {
+				Con_Print("%04X: *I = V0 to V%X, I += %X + 1 [Advance I]", opcode, vx, c8.I, vx);
 				c8.I = c8.I + vx + 1;
 			}
 			else
-				Con_Print("%X: *I = V0 - V%X [I unmodified]", opcode, vx);
+				Con_Print("%04X: *I = V0 to V%X", opcode, vx);
 			break;
 		case 0x65:
 			//Fill registers V0 to VX inclusive with the values stored in memory
@@ -355,20 +355,20 @@ void Chip8_Cycle() {
 			for (uint i = 0; i <= vx; ++i) {
 				c8.V[i] = c8.memory[c8.I + i];
 			}
-			if (!opcodeSettings.fixedMemoryAccess) {
-				Con_Print("%X: V0 - V%X = *I, I += %X + 1", opcode, vx, vx);
+			if (opcodeSettings.storeLoadAdvance) {
+				Con_Print("%04X: V0 to V%X = *I, I += %X + 1 [Advance I]", opcode, vx, vx);
 				c8.I = c8.I + vx + 1;
 			}
 			else 
-				Con_Print("%X: V0 - V%X = *I, [I unmodified]", opcode, vx, vx);
+				Con_Print("%04X: V0 to V%X = *I", opcode, vx, vx);
 			break;
 		default:
-			Con_Print("%X: Undefined opcode");
+			Con_Print("%04X: Undefined opcode", opcode);
 			PauseEmulation(); return;
 		}
 		break;
 	default:
-		Con_Print("%X: Undefined opcode");
+		Con_Print("%04X: Undefined opcode", opcode);
 		PauseEmulation(); return;
 	}
 	c8.PC += 2;

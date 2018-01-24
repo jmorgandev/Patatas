@@ -165,7 +165,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		
 		if (cycleTime >= cycleFreq || tickTime >= tickFreq) {
 			while (cycleTime >= cycleFreq) {
-				Chip8_Cycle();
+				if(!paused) Chip8_Cycle();
 				if (c8.displayUpdate) Draw_PaintFrame(deviceContext);
 				cycleTime -= cycleFreq;
 			}
@@ -274,7 +274,8 @@ static void PTS_Step() {
 		Chip8_Tick();
 		cycleTime -= tickFreq;
 	}
-	if(modeless_dialogs[DLG_REGISTER] != NULL)
+
+	if (modeless_dialogs[DLG_REGISTER] != NULL)
 		SendMessage(modeless_dialogs[DLG_REGISTER], WM_COMMAND, MAKEWPARAM(IDC_REFRESH, NULL), NULL);
 }
 

@@ -3,6 +3,8 @@
 
 static HWND handle = NULL;
 static HWND textHandle = NULL;
+static HFONT fnt = NULL;
+static uint lines = 0;
 
 static LRESULT CALLBACK ConProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -37,7 +39,7 @@ void Con_Start() {
 		"Opcode Logs",
 		WS_VISIBLE | WS_SYSMENU,
 		CW_USEDEFAULT, CW_USEDEFAULT,
-		400, 200, NULL, NULL, GetModuleHandle(NULL), NULL
+		450, 250, NULL, NULL, GetModuleHandle(NULL), NULL
 	);
 	if (handle == NULL) {
 		NotifyError();
@@ -45,8 +47,15 @@ void Con_Start() {
 }
 
 #define FORMAT_BUFFER_SIZE 4096
+#define CONSOLE_MAX_LINES 512
 void Con_Print(const char* fmt, ...) {
 	if (handle == NULL) return;
+	if (lines == CONSOLE_MAX_LINES)
+		SendMessage(textHandle, EM_SETSEL, (WPARAM)0, (LPARAM)-1);
+	else {
+		uint index = GetWindowTextLength(textHandle);
+		SendMessage(textHandle, EM_SETSEL, (WPARAM)index, (LPARAM)index);
+	}
 	va_list args;
 	char buffer[FORMAT_BUFFER_SIZE];
 
@@ -58,26 +67,36 @@ void Con_Print(const char* fmt, ...) {
 	buffer[length++] = '\n';
 	buffer[length] = '\0';
 
-	uint index = GetWindowTextLength(textHandle);
-	SendMessage(textHandle, EM_SETSEL, (WPARAM)index, (LPARAM)index);
 	SendMessage(textHandle, EM_REPLACESEL, 0, (LPARAM)buffer);
 }
 
 static LRESULT CALLBACK ConProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 	case WM_CREATE: {
+			uint borderx = GetSystemMetrics(SM_CXSIZEFRAME);
+			uint bordery = GetSystemMetrics(SM_CYSIZEFRAME);
+			uint scrollpx = GetSystemMetrics(SM_CXVSCROLL);
+			uint scrollpy = GetSystemMetrics(SM_CYVSCROLL);
+			uint sysmenupy = GetSystemMetrics(SM_CYCAPTION);
 			textHandle = CreateWindowEx(
 				WS_EX_CLIENTEDGE, "EDIT", "",
 				WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL,
-				0, 0, 400, 200, hwnd, NULL, GetModuleHandle(NULL), NULL
+				0, 0, 450 - scrollpx - borderx, 250 - sysmenupy - scrollpy,
+				hwnd, NULL, GetModuleHandle(NULL), NULL
 			);
 			if (textHandle == NULL) {
 				NotifyError();
 				DestroyWindow(hwnd);
 				return FALSE;
 			}
+			HDC temp = GetDC(hwnd);
+			uint height = -MulDiv(10, GetDeviceCaps(temp, LOGPIXELSY), 72);
+			ReleaseDC(hwnd, temp);
+			fnt = CreateFont(height, 0, 0, 0, FW_REGULAR, 0, 0, 0, 0, 0, 0, 0, 0, "Consolas");
+			SendMessage(textHandle, WM_SETFONT, (WPARAM)fnt, TRUE);
 		} break;
 	case WM_DESTROY:
+		DeleteObject(fnt);
 		handle = NULL;
 		textHandle = NULL;
 		break;
