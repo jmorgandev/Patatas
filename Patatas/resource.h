@@ -109,13 +109,14 @@
 #define ID_WINSIZE_X16                  40036
 #define ID_WINSIZE_X20                  40037
 #define ID_WINSIZE_CUSTOM               40038
+#define ID_VIEW_CONSOLE                 40093
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        124
-#define _APS_NEXT_COMMAND_VALUE         40093
+#define _APS_NEXT_COMMAND_VALUE         40094
 #define _APS_NEXT_CONTROL_VALUE         1081
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

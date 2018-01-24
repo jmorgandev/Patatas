@@ -6,9 +6,13 @@
 #include "input.h"
 #include "chip8.h"
 #include "resource.h"
-#include "windraw.h"#
+#include "windraw.h"
 #include "sound.h"
+#include "console.h"
 #include <CommCtrl.h>
+#include <fcntl.h>
+#include <io.h>
+#include <stdio.h>
 
 #include "modeless_dialog.h"
 HWND modeless_dialogs[DLG_COUNT];
@@ -37,7 +41,11 @@ HDC deviceContext = NULL;
 
 static bool running = true;
 static bool paused = false;
-static bool stepForward = false;
+
+static void PTS_Step();
+
+static double cycleTime = 0;
+static double tickTime = 0;
 
 bool MessageForDialog(MSG* msg) {
 	bool handled = false;
@@ -95,6 +103,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			MB_ICONEXCLAMATION | MB_OK);
 		return 0;
 	}
+
 	uint border = GetSystemMetrics(SM_CXSIZEFRAME);
 	RECT wr = { 0, 0, (VID_WIDTH * drawScale) + border, (VID_HEIGHT * drawScale) + border };
 	AdjustWindowRect(&wr, winStyle, TRUE);
@@ -133,10 +142,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Draw_Init();
 	Input_Init();
 	Sound_Init();
+	Con_Init();
 
 	double lastTime = (double)GetTickCount();
-	double cycleTime = 0;
-	double tickTime = 0;
 
 	Chip8_TestProgram();
 	
@@ -148,38 +156,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				DispatchMessage(&msg);
 			}
 		}
-		if (paused) {
-			if (stepForward) {
-				cycleTime += cycleFreq;
+		if (paused) continue;
+
+		double currentTime = (double)GetTickCount();
+		cycleTime += (currentTime - lastTime);
+		tickTime += (currentTime - lastTime);
+		lastTime = currentTime;
+		
+		if (cycleTime >= cycleFreq || tickTime >= tickFreq) {
+			while (cycleTime >= cycleFreq) {
 				Chip8_Cycle();
-				if (cycleTime >= tickFreq) {
-					Chip8_Tick();
-					cycleTime -= tickFreq;
-				}
-				stepForward = false;
+				if (c8.displayUpdate) Draw_PaintFrame(deviceContext);
+				cycleTime -= cycleFreq;
+			}
+			while (tickTime >= tickFreq) {
+				Chip8_Tick();
+				tickTime -= tickFreq;
 			}
 		}
 		else {
-			double currentTime = (double)GetTickCount();
-			cycleTime += (currentTime - lastTime);
-			tickTime += (currentTime - lastTime);
-			lastTime = currentTime;
-
-			if (cycleTime >= cycleFreq || tickTime >= tickFreq) {
-				while (cycleTime >= cycleFreq) {
-					Chip8_Cycle();
-					if (c8.displayUpdate) Draw_PaintFrame(deviceContext);
-					cycleTime -= cycleFreq;
-				}
-				while (tickTime >= tickFreq) {
-					Chip8_Tick();
-					tickTime -= tickFreq;
-				}
-			}
-			else {
-				//Sleep until next cycle/tick?
-			}
+			//Sleep until next cycle/tick?
 		}
+		
 	}
 
 	Draw_Exit();
@@ -257,9 +255,29 @@ void HandleCommand(HWND hwnd, word cmd) {
 		paused = !paused;
 		break;
 	case ID_CHIP8_STEP:
-		if (paused) stepForward = true;
+		if (paused) PTS_Step();
 		break;
 	case ID_CHIP8_RESET:
+		Chip8_Reload();
+		break;
+	case ID_VIEW_CONSOLE:
+		Con_Start();
 		break;
 	}
+}
+
+static void PTS_Step() {
+	cycleTime += cycleFreq;
+	Chip8_Cycle();
+	if (c8.displayUpdate) Draw_PaintFrame(deviceContext);
+	if (cycleTime >= tickFreq) {
+		Chip8_Tick();
+		cycleTime -= tickFreq;
+	}
+	if(modeless_dialogs[DLG_REGISTER] != NULL)
+		SendMessage(modeless_dialogs[DLG_REGISTER], WM_COMMAND, MAKEWPARAM(IDC_REFRESH, NULL), NULL);
+}
+
+void PauseEmulation() {
+	paused = true;
 }
