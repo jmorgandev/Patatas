@@ -70,6 +70,7 @@ void Chip8_SetSpeed(uint cps) {
 
 void Chip8_Cycle() {
 	if (c8.keyBlock || c8.tickBlock) return;
+	bool advancePC = true;
 	word opcode = (c8.memory[c8.PC] << 8) | (c8.memory[c8.PC + 1]);
 	uint addr = opcode & 0xFFF;
 	uint vx = (opcode & 0xF00) >> 8;
@@ -90,6 +91,7 @@ void Chip8_Cycle() {
 				PauseEmulation(); return;
 			}
 			c8.PC = c8.stack[--c8.SP];
+			c8.stack[c8.SP] = 0x000;
 		}
 		else {
 			Con_Print("%04X: Undefined opcode", opcode);
@@ -100,12 +102,14 @@ void Chip8_Cycle() {
 		//Jump to address NNN
 		Con_Print("%04X: Jump to address %03X", opcode, addr);
 		c8.PC = addr;
+		advancePC = false;
 		break;
 	case 0x2:
 		//Execute subroutine starting at address NNN
 		Con_Print("%04X: Call subroutine at address %03X", opcode, addr);
 		c8.stack[c8.SP++] = c8.PC;
 		c8.PC = addr;
+		advancePC = false;
 		break;
 	case 0x3:
 		//Skip the following instruction if the value of VX equals NN
@@ -118,7 +122,7 @@ void Chip8_Cycle() {
 		if (c8.V[vx] != num8) c8.PC += 2;
 		break;
 	case 0x5:
-		if (opcode & 0xF == 0x0) {
+		if ((opcode & 0xF) == 0x0) {
 			//Skip the following instruction if the value of VX is equal to the value of VY
 			Con_Print("%04X: Skip next opcode if V%X (%02X) == V%X (%02X)",
 				opcode, vx, c8.V[vx], vy, c8.V[vy]);
@@ -216,7 +220,7 @@ void Chip8_Cycle() {
 		}
 		break;
 	case 0x9:
-		if (opcode & 0xF == 0x0) {
+		if ((opcode & 0xF) == 0x0) {
 			//Skip the following instruction if the value of register VX is
 			//not equal to the value of register VY
 			Con_Print("%04X: Skip next opcode if V%X (%02X) != V%X (%02X)",
@@ -237,6 +241,7 @@ void Chip8_Cycle() {
 		//Jump to address NNN + V0
 		Con_Print("%04X: Jump to address %03X + V0 (%02X)", opcode, addr, c8.V[0x0]);
 		c8.PC = addr + c8.V[0x0];
+		advancePC = false;
 		break;
 	case 0xC:
 		//Set VX to a random number with a mask of NN
@@ -275,14 +280,14 @@ void Chip8_Cycle() {
 		c8.displayUpdate = true;
 	}   break;
 	case 0xE:
-		if (opcode & 0xFF == 0x9E) {
+		if ((opcode & 0xFF) == 0x9E) {
 			//Skip the following instruction if the key corresponding to
 			//the hex value stored in VX is pressed
 			Con_Print("%04X: Skip next opcode if Key value V%X (%02X) is pressed",
 				opcode, vx, c8.V[vx]);
 			if (c8.keys[c8.V[vx]]) c8.PC += 2;
 		}
-		else if (opcode & 0xFF == 0xA1) {
+		else if ((opcode & 0xFF) == 0xA1) {
 			//Skip the following instruction if the key corresponding to
 			//the hex value stored in VX is NOT pressed
 			Con_Print("%04X: Skip next opcode if Key value V%X (%02X) is not pressed",
@@ -371,7 +376,7 @@ void Chip8_Cycle() {
 		Con_Print("%04X: Undefined opcode", opcode);
 		PauseEmulation(); return;
 	}
-	c8.PC += 2;
+	if(advancePC) c8.PC += 2;
 }
 
 void Chip8_Tick() {

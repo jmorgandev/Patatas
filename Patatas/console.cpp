@@ -1,4 +1,5 @@
 #include "console.h"
+#include "windraw.h"
 #include <stdio.h>
 
 static HWND handle = NULL;
@@ -34,12 +35,12 @@ bool Con_Init() {
 void Con_Start() {
 	if (handle != NULL) return;
 	handle = CreateWindowEx(
-		WS_EX_CLIENTEDGE | WS_EX_TOOLWINDOW | WS_EX_DLGMODALFRAME | WS_EX_TOPMOST,
+		WS_EX_CLIENTEDGE | WS_EX_TOOLWINDOW | WS_EX_DLGMODALFRAME,
 		"PTS_CONSOLECLASS",
 		"Opcode Logs",
 		WS_VISIBLE | WS_SYSMENU,
 		CW_USEDEFAULT, CW_USEDEFAULT,
-		450, 250, NULL, NULL, GetModuleHandle(NULL), NULL
+		450, 250, winHandle, NULL, GetModuleHandle(NULL), NULL
 	);
 	if (handle == NULL) {
 		NotifyError();
@@ -47,11 +48,13 @@ void Con_Start() {
 }
 
 #define FORMAT_BUFFER_SIZE 4096
-#define CONSOLE_MAX_LINES 512
+#define CONSOLE_MAX_LINES 100
 void Con_Print(const char* fmt, ...) {
 	if (handle == NULL) return;
-	if (lines == CONSOLE_MAX_LINES)
+	if (lines == CONSOLE_MAX_LINES) {
 		SendMessage(textHandle, EM_SETSEL, (WPARAM)0, (LPARAM)-1);
+		lines = 0;
+	}
 	else {
 		uint index = GetWindowTextLength(textHandle);
 		SendMessage(textHandle, EM_SETSEL, (WPARAM)index, (LPARAM)index);
@@ -68,6 +71,7 @@ void Con_Print(const char* fmt, ...) {
 	buffer[length] = '\0';
 
 	SendMessage(textHandle, EM_REPLACESEL, 0, (LPARAM)buffer);
+	lines++;
 }
 
 static LRESULT CALLBACK ConProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
